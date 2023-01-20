@@ -13,7 +13,7 @@ export default class BaseComponent {
     this.node.innerText = textContent;
   }
 
-  append(child: BaseComponent): void {
+  insertChild(child: BaseComponent): void {
     this.node.append(child.getNode());
   }
 
@@ -29,7 +29,7 @@ export default class BaseComponent {
 
   appendChildren(child: BaseComponent[]): void {
     child.forEach((el) => {
-      this.append(el);
+      this.insertChild(el);
     });
   }
 

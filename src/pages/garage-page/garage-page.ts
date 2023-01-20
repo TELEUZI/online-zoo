@@ -40,17 +40,18 @@ export default class GaragePage extends PageWithPagination implements PageContro
       this.checkPaginationButtons.bind(this),
       this.updateGarage.bind(this),
     );
-    this.garage.createGarage(this.currentPage);
-    this.form = new CarForm(['car-form']);
-    this.form.onSubmit = this.getFormData.bind(this);
-    this.nextPageButton = new Button('Next page', [], this.showNext.bind(this));
-    this.previousPageButton = new Button('Previous page', [], this.showPrevious.bind(this));
-    this.randomCarsButton = new Button(
-      'Generate random cars',
-      ['page__controls_random-cars'],
-      this.createRandomCars.bind(this),
-    );
-    this.timer = new Timer();
+    this.garage.createGarage(this.currentPage).then(() => {
+      this.form = new CarForm(['car-form']);
+      this.form.onSubmit = this.getFormData.bind(this);
+      this.nextPageButton = new Button('Next page', [], this.showNext.bind(this));
+      this.previousPageButton = new Button('Previous page', [], this.showPrevious.bind(this));
+      this.randomCarsButton = new Button(
+        'Generate random cars',
+        ['page__controls_random-cars'],
+        this.createRandomCars.bind(this),
+      );
+      this.timer = new Timer();
+    });
   }
 
   async createPage(): Promise<void> {
@@ -76,7 +77,7 @@ export default class GaragePage extends PageWithPagination implements PageContro
   }
 
   handleRaceEnd = async (winner: CarTrack): Promise<void> => {
-    GaragePageModel.createWinner(this.currentPage, winner, this.timer.getSeconds());
+    await GaragePageModel.createWinner(this.currentPage, winner, this.timer.getSeconds());
     this.createWinPopup(
       `Первым пришёл водитель ${winner.getCar().getName()} за ${this.timer.getTime()}`,
     );
@@ -89,7 +90,7 @@ export default class GaragePage extends PageWithPagination implements PageContro
   }
 
   async getFormData(car: CarChars): Promise<void> {
-    this.checkPaginationButtons();
+    await this.checkPaginationButtons();
     GaragePageModel.createCar(car.name, car.color);
     this.garage.updateGarage();
   }
@@ -100,8 +101,9 @@ export default class GaragePage extends PageWithPagination implements PageContro
   }
 
   createRandomCars(): void {
-    GaragePageModel.сreateCars();
-    this.garage.updateGarage();
+    GaragePageModel.createCars().then(() => {
+      this.garage.updateGarage();
+    });
   }
 
   async showPrevious(): Promise<void> {
@@ -118,7 +120,7 @@ export default class GaragePage extends PageWithPagination implements PageContro
     this.popUp.insertChild(resultText);
   }
 
-  updateGarage(): void {
-    this.garage.createGarage(this.currentPage);
+  async updateGarage(): Promise<void> {
+    return this.garage.createGarage(this.currentPage);
   }
 }

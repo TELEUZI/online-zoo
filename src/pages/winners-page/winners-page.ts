@@ -54,7 +54,7 @@ export default class WinnersPage extends PageWithPagination implements PageContr
     this.pageNumber = new BaseComponent('h3', ['page__number'], `Page #(${this.currentPage})`);
     this.root.append(...[this.header.getNode(), this.pageNumber.getNode()]);
     this.root.prepend(this.garageControls.getNode());
-    this.updateTable();
+    return this.updateTable();
   }
 
   async updateTable(): Promise<void> {
@@ -68,14 +68,15 @@ export default class WinnersPage extends PageWithPagination implements PageContr
   }
 
   createTableUI(winners: CarWinner[]): void {
-    this.checkPaginationButtons();
-    this.pageNumber.setContent(`Page #(${this.currentPage})`);
-    this.winnersTable.clearBody();
-    winners.forEach((row, index) => {
-      row.prepend(new BaseComponent('td', [], (index + 1).toString()));
-      this.winnersTable.setRow(row);
+    this.checkPaginationButtons().then(() => {
+      this.pageNumber.setContent(`Page #(${this.currentPage})`);
+      this.winnersTable.clearBody();
+      winners.forEach((row, index) => {
+        row.prepend(new BaseComponent('td', [], (index + 1).toString()));
+        this.winnersTable.setRow(row);
+      });
+      this.root.append(this.winnersTable.getNode());
     });
-    this.root.append(this.winnersTable.getNode());
   }
 
   async getSorted(value: string): Promise<CarWinner[]> {
@@ -91,11 +92,11 @@ export default class WinnersPage extends PageWithPagination implements PageContr
 
   async showNext(): Promise<void> {
     this.currentPage += 1;
-    this.updateTable();
+    return this.updateTable();
   }
 
   async showPrevious(): Promise<void> {
     this.currentPage -= 1;
-    this.updateTable();
+    return this.updateTable();
   }
 }

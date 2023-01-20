@@ -9,22 +9,24 @@ export default class GaragePageModel extends CarModel {
     const cars = await getWinners(page);
     const winner = cars.items.find((cart) => cart.id === car.getId());
     if (typeof winner === 'undefined') {
-      createWinner({ id: car.getId(), wins: 1, time });
+      await createWinner({ id: car.getId(), wins: 1, time });
     } else {
-      updateWinner(car.getId(), {
+      await updateWinner(car.getId(), {
         wins: (winner.wins += 1),
         time: winner.time > time ? time : winner.time,
       });
     }
   }
 
-  static async сreateCars(): Promise<void> {
-    for (let i = 0; i < 100; i += 1) {
-      createCar({ name: getRandomName(), color: getRandomColor() });
-    }
+  static async createCars(): Promise<void> {
+    await Promise.all(
+      Array.from({ length: 100 }, () =>
+        createCar({ name: getRandomName(), color: getRandomColor() }),
+      ),
+    );
   }
 
-  static createCar(name: string, color: string): void {
-    createCar({ name, color });
+  static async createCar(name: string, color: string): Promise<void> {
+    await createCar({ name, color });
   }
 }
