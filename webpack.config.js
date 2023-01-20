@@ -24,7 +24,11 @@ module.exports = {
   resolve: {
     extensions: ['.tsx', '.ts', '.js'],
   },
-  plugins: [new HtmlWebpackPlugin()],
+  plugins: [new HtmlWebpackPlugin(
+    {
+      template: './src/index.html',
+    }
+  )],
 
   mode: 'development',
   output: {
