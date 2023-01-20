@@ -22,8 +22,7 @@
   margin-left: -37.5%;
   height: 100px;
   background-color: $white;
-  border: solid 4px $black;
-  border-color: $black;
+  border: 4px solid $black;
   z-index: 2;
 }
 
@@ -32,7 +31,6 @@
 }
 
 .car-svg {
-  -webkit-transform: scaleX(-1);
   transform: scaleX(-1);
 }
 
@@ -99,7 +97,7 @@
 }
 
 .car-name {
-  font-family: 'Open Sans';
+  font-family: 'Open Sans', serif;
   color: $white
 }
 
@@ -167,7 +165,7 @@
 
 @keyframes slide {
   from {
-    margin-left: 0%;
+    margin-left: 0;
   }
   to {
     margin-left: 80%;
@@ -175,7 +173,7 @@
 }
 
 .table {
-  font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
+  font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif, serif;
   font-size: 14px;
   background: $light-white;
   text-align: center;
@@ -206,7 +204,7 @@
 
 .page__name, .page__number, .form-explanation {
   color: $antiquewhite;
-  font-family: Poppins;
+  font-family: Poppins, serif;
 }
 
 .winner-page {
