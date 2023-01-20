@@ -1,5 +1,5 @@
 import { deleteCar, updateCar } from '../../../api/car-api';
-import { drive, startEngine, stopEngine } from '../../../api/engine-api';
+import { startDrive, startEngine, stopEngine } from '../../../api/engine-api';
 import { deleteWinner } from '../../../api/winners-api';
 import BaseComponent from '../../../components/base-component';
 import Button from '../../../components/button/button';
@@ -72,10 +72,12 @@ export default class CarTrack extends BaseComponent {
   }
 
   deleteCar(): void {
-    deleteWinner(this.id);
-    deleteCar(this.id);
-    this.node.remove();
-    this.onUpdate();
+    deleteWinner(this.id)
+      .then(() => deleteCar(this.id))
+      .then(() => {
+        this.node.remove();
+        this.onUpdate();
+      });
   }
 
   setColor(color: string): void {
@@ -88,7 +90,7 @@ export default class CarTrack extends BaseComponent {
     this.stopButton.removeAttribute('disabled');
     this.startButton.setAttribute('disabled', 'disabled');
     return new Promise((resolve) =>
-      drive(this.id)
+      startDrive(this.id)
         .then((res) => {
           if (res.success) resolve(this);
           else {
