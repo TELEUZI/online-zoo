@@ -13,23 +13,23 @@ export default class BaseComponent {
     this.node.innerText = textContent;
   }
 
-  insertChild(child: BaseComponent): void {
-    this.node.appendChild(child.getNode());
+  append(child: BaseComponent): void {
+    this.node.append(child.getNode());
   }
 
-  insertChildBefore(child: BaseComponent): void {
+  prepend(child: BaseComponent): void {
     this.node.prepend(child.getNode());
   }
 
-  insertChildsBefore(child: BaseComponent[]): void {
+  prependChildren(child: BaseComponent[]): void {
     child.forEach((el) => {
-      this.insertChildBefore(el);
+      this.prepend(el);
     });
   }
 
-  insertChilds(child: BaseComponent[]): void {
+  appendChildren(child: BaseComponent[]): void {
     child.forEach((el) => {
-      this.insertChild(el);
+      this.append(el);
     });
   }
 
@@ -55,10 +55,6 @@ export default class BaseComponent {
 
   toggleClass(className: string): void {
     this.node.classList.toggle(className);
-  }
-
-  setBgImage(image: string): void {
-    this.node.style.backgroundImage = `url(${image})`;
   }
 
   addListener(

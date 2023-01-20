@@ -63,8 +63,8 @@ export default class CarForm extends BaseComponent {
   private createUI(): void {
     const inputsWrapper = new BaseComponent('div', ['form__inputs-wrapper']);
     const formControls = new BaseComponent('div', ['form__controls']);
-    inputsWrapper.insertChilds(this.inputs);
-    formControls.insertChilds([this.reset, this.submit]);
-    this.insertChilds([inputsWrapper, formControls]);
+    inputsWrapper.appendChildren(this.inputs);
+    formControls.appendChildren([this.reset, this.submit]);
+    this.appendChildren([inputsWrapper, formControls]);
   }
 }

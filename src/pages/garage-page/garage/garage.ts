@@ -46,12 +46,12 @@ export default class Garage extends BaseComponent {
     const pageNumber = new BaseComponent('h3', ['page__number'], `Page #(${page})`);
     const carTracks = await this.model.getCars(page);
     const raceControls = new BaseComponent('div', ['garage__controls']);
-    raceControls.insertChilds([this.stopButton, this.raceButton]);
+    raceControls.appendChildren([this.stopButton, this.raceButton]);
     carTracks.forEach((car) => {
       car.setOnUpdate(this.updateGarage.bind(this));
-      this.insertChildBefore(car);
+      this.prepend(car);
     });
-    this.insertChildsBefore([raceControls, pageNumber, header]);
+    this.prependChildren([raceControls, pageNumber, header]);
   }
 
   async animateAllCars(): Promise<void> {

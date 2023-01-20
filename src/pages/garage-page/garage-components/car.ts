@@ -30,7 +30,7 @@ export default class Car extends BaseComponent {
     this.carColorUpdate = new Input('color', ['task__input', 'hidden']);
     this.carNameUpdate.setValue(name);
     this.carColorUpdate.setValue(color);
-    carInfoWrapper.insertChilds([this.carName, this.carNameUpdate, this.carColorUpdate]);
+    carInfoWrapper.appendChildren([this.carName, this.carNameUpdate, this.carColorUpdate]);
     this.node.append(carInfoWrapper.getNode());
     this.node.append(this.carImage);
   }

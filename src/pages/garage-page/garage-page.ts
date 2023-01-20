@@ -57,8 +57,8 @@ export default class GaragePage extends PageWithPagination implements PageContro
     const garageControls = new BaseComponent('div', ['page__controls']);
     const paginationControls = new BaseComponent('div', ['page__controls_pagination']);
     const carFormLabel = new BaseComponent('h2', ['form-explanation'], 'Create new car!');
-    paginationControls.insertChilds([this.nextPageButton, this.previousPageButton]);
-    garageControls.insertChilds([this.randomCarsButton, paginationControls]);
+    paginationControls.appendChildren([this.nextPageButton, this.previousPageButton]);
+    garageControls.appendChildren([this.randomCarsButton, paginationControls]);
     this.root.append(
       carFormLabel.getNode(),
       this.form.getNode(),

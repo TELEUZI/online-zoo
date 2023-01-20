@@ -39,8 +39,8 @@ export default class CarTrack extends BaseComponent {
     this.deleteButton = new Button('Delete', ['delete-button'], this.deleteCar.bind(this));
     const icon = new Icon(['finish-flag']);
     const animationControls = new BaseComponent('div', ['car-track__animation-controls']);
-    animationControls.insertChilds([this.startButton, this.stopButton]);
-    this.insertChilds([icon, animationControls, this.car, this.deleteButton, this.updateButton]);
+    animationControls.appendChildren([this.startButton, this.stopButton]);
+    this.appendChildren([icon, animationControls, this.car, this.deleteButton, this.updateButton]);
   }
 
   editCar(): void {

@@ -39,7 +39,7 @@ export default class WinnersPage extends PageWithPagination implements PageContr
     this.nextPageButton = new Button('Next page', [], this.showNext.bind(this));
     this.previousPageButton = new Button('Previous page', [], this.showPrevious.bind(this));
     this.garageControls = new BaseComponent('div', ['garage__controls']);
-    this.garageControls.insertChilds([this.nextPageButton, this.previousPageButton]);
+    this.garageControls.appendChildren([this.nextPageButton, this.previousPageButton]);
   }
 
   async getCount(): Promise<number> {
@@ -72,7 +72,7 @@ export default class WinnersPage extends PageWithPagination implements PageContr
     this.pageNumber.setContent(`Page #(${this.currentPage})`);
     this.winnersTable.clearBody();
     winners.forEach((row, index) => {
-      row.insertChildBefore(new BaseComponent('td', [], (index + 1).toString()));
+      row.prepend(new BaseComponent('td', [], (index + 1).toString()));
       this.winnersTable.setRow(row);
     });
     this.root.append(this.winnersTable.getNode());

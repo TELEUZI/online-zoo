@@ -12,13 +12,11 @@ export default class Controller extends BaseComponent {
 
   private router: Router;
 
-  private menu: Menu;
-
   constructor() {
     super('div', ['app']);
-    this.menu = new Menu();
+    const menu = new Menu();
     const header = new BaseComponent('header', ['header']);
-    header.insertChild(this.menu);
+    header.insertChild(menu);
     this.insertChild(header);
     this.appRoot = new BaseComponent('div', ['page']);
     this.insertChild(this.appRoot);

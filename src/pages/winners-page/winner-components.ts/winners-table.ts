@@ -17,7 +17,7 @@ export default class WinnerResult extends BaseComponent {
       new TableHead('Wins', onWins),
       new TableHead('Best time (seconds)', onTime),
     ];
-    headrow.insertChilds(headers);
+    headrow.appendChildren(headers);
     head.insertChild(headrow);
     this.insertChild(head);
     this.insertChild(this.body);
