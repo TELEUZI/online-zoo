@@ -12,9 +12,7 @@ import Garage from './garage/garage';
 
 const TIMER_DELAY = 0;
 
-export default class GaragePage extends PageWithPagination implements PageController {
-  private root: HTMLElement;
-
+export class GaragePage extends PageWithPagination implements PageController {
   private garage: Garage;
 
   private form: CarForm;
@@ -31,15 +29,18 @@ export default class GaragePage extends PageWithPagination implements PageContro
 
   private model = new GaragePageModel();
 
-  constructor(root: HTMLElement) {
+  constructor(record: Record<string, unknown>) {
     super();
-    this.root = root;
     this.garage = new Garage(
       this.startTimer.bind(this),
       this.handleRaceEnd.bind(this),
       this.checkPaginationButtons.bind(this),
       this.updateGarage.bind(this),
     );
+    this.createPage();
+  }
+
+  async createPage(): Promise<void> {
     this.garage.createGarage(this.currentPage).then(() => {
       this.form = new CarForm(['car-form']);
       this.form.onSubmit = this.getFormData.bind(this);
@@ -51,25 +52,22 @@ export default class GaragePage extends PageWithPagination implements PageContro
         this.createRandomCars.bind(this),
       );
       this.timer = new Timer();
+      const garageControls = new BaseComponent('div', ['page__controls']);
+      const paginationControls = new BaseComponent('div', ['page__controls_pagination']);
+      const carFormLabel = new BaseComponent('h2', ['form-explanation'], 'Create new car!');
+      paginationControls.appendChildren([this.nextPageButton, this.previousPageButton]);
+      garageControls.appendChildren([this.randomCarsButton, paginationControls]);
+      this.node.append(
+        carFormLabel.getNode(),
+        this.form.getNode(),
+        garageControls.getNode(),
+        this.garage.getNode(),
+      );
+      this.popUp = new PopUpWindow('');
+      this.popUp.onOkClick = this.toggleModal.bind(this);
+      this.modal = new ModalWindow(this.popUp, this.node);
+      this.toggleModal();
     });
-  }
-
-  async createPage(): Promise<void> {
-    const garageControls = new BaseComponent('div', ['page__controls']);
-    const paginationControls = new BaseComponent('div', ['page__controls_pagination']);
-    const carFormLabel = new BaseComponent('h2', ['form-explanation'], 'Create new car!');
-    paginationControls.appendChildren([this.nextPageButton, this.previousPageButton]);
-    garageControls.appendChildren([this.randomCarsButton, paginationControls]);
-    this.root.append(
-      carFormLabel.getNode(),
-      this.form.getNode(),
-      garageControls.getNode(),
-      this.garage.getNode(),
-    );
-    this.popUp = new PopUpWindow('');
-    this.popUp.onOkClick = this.toggleModal.bind(this);
-    this.modal = new ModalWindow(this.popUp, this.root);
-    this.toggleModal();
   }
 
   async getCount(): Promise<number> {

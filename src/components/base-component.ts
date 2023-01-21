@@ -45,6 +45,10 @@ export default class BaseComponent {
     this.node.innerText = content;
   }
 
+  setHTML(html: string): void {
+    this.node.innerHTML = html;
+  }
+
   setAttribute(attribute: string, value: string): void {
     this.node.setAttribute(attribute, value);
   }
@@ -63,5 +67,9 @@ export default class BaseComponent {
     options: boolean | AddEventListenerOptions = false,
   ): void {
     this.node.addEventListener(event, listener, options);
+  }
+
+  destroy(): void {
+    this.node.remove();
   }
 }

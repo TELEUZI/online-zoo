@@ -8,8 +8,8 @@ export default class Menu extends BaseComponent {
   constructor() {
     super('ul', ['menu'], '');
     this.items.push(
-      new MenuItem('Garage', '#garage', 'garage-icon'),
-      new MenuItem('Winners', '#winners', 'trophy-icon'),
+      new MenuItem('Garage', 'garage', 'garage-icon'),
+      new MenuItem('Winners', 'winners', 'trophy-icon'),
     );
     this.items.map((el) => this.insertChild(el));
   }

@@ -28,6 +28,6 @@ export default class WinnerResult extends BaseComponent {
   }
 
   clearBody(): void {
-    this.body.getNode().innerHTML = '';
+    this.body.destroy();
   }
 }

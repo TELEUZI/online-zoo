@@ -1,8 +1,9 @@
 import Button from '../components/button/button';
+import BaseComponent from '../components/base-component';
 
 export const PAGINATION_LIMIT = 7;
 export const PAGINATION_LIMIT_WINNERS = 10;
-export default abstract class PageWithPagination {
+export default abstract class PageWithPagination extends BaseComponent {
   protected currentPage = 1;
 
   protected nextPageButton: Button;

@@ -4,9 +4,9 @@ import Car from '../../garage-page/garage-components/car';
 export default class CarWinner extends BaseComponent {
   private car: Car;
 
-  private wins: number;
+  private readonly wins: number;
 
-  private bestTime: number;
+  private readonly bestTime: number;
 
   private id: number;
 
@@ -21,9 +21,5 @@ export default class CarWinner extends BaseComponent {
     <td class="table__col">${this.car.getName()}</td>
     <td class="table__col">${this.wins}</td>
     <td class="table__col">${this.bestTime}</td>`;
-  }
-
-  destroy(): void {
-    this.node.remove();
   }
 }

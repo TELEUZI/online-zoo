@@ -1,5 +1,5 @@
 const enum APIConstants {
-  baseUrl = 'https://async-race-game.herokuapp.com',
+  baseUrl = 'http://localhost:3000',
   garageCarLimit = 7,
   winnerCarLimit = 10,
 }

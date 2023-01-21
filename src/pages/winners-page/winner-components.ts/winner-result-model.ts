@@ -9,17 +9,12 @@ export default class WinnerResultModel {
 
   async getCars(page: number, sort?: string, order?: string): Promise<CarWinner[]> {
     this.winners = [];
-    const cars = await getWinners(page, APIConstants.winnerCarLimit, sort, order);
+    const winners = await getWinners(page, APIConstants.winnerCarLimit, sort, order);
 
     return Promise.all(
-      cars.items.map(async (car: WinnerInfo) => {
-        return new CarWinner(
-          car.id,
-          (await getCar(car.id)).name,
-          (await getCar(car.id)).color,
-          car.wins,
-          car.time,
-        );
+      winners.items.map(async (winner: WinnerInfo) => {
+        const carInfo = await getCar(winner.id);
+        return new CarWinner(winner.id, carInfo.name, carInfo.color, winner.wins, winner.time);
       }),
     );
   }

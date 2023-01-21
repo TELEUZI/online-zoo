@@ -8,9 +8,8 @@ import CarWinner from './winner-components.ts/winner';
 import WinnerResultModel from './winner-components.ts/winner-result-model';
 import WinnerResult from './winner-components.ts/winners-table';
 
-export default class WinnersPage extends PageWithPagination implements PageController {
-  private root: HTMLElement;
-
+// eslint-disable-next-line import/prefer-default-export
+export class WinnersPage extends PageWithPagination implements PageController {
   paginationLimit = PAGINATION_LIMIT_WINNERS;
 
   private winnersTable: WinnerResult;
@@ -27,9 +26,8 @@ export default class WinnersPage extends PageWithPagination implements PageContr
 
   pageNumber: BaseComponent;
 
-  constructor(root: HTMLElement) {
+  constructor(record: Record<string, unknown>) {
     super();
-    this.root = root;
     this.model = new WinnerResultModel();
     this.currentPage = 1;
     this.winnersTable = new WinnerResult(
@@ -40,6 +38,7 @@ export default class WinnersPage extends PageWithPagination implements PageContr
     this.previousPageButton = new Button('Previous page', [], this.showPrevious.bind(this));
     this.garageControls = new BaseComponent('div', ['garage__controls']);
     this.garageControls.appendChildren([this.nextPageButton, this.previousPageButton]);
+    this.createPage();
   }
 
   async getCount(): Promise<number> {
@@ -52,8 +51,8 @@ export default class WinnersPage extends PageWithPagination implements PageContr
   async createPage(): Promise<void> {
     this.header = new BaseComponent('h2', ['page__name'], `Winners (${await this.getCount()})`);
     this.pageNumber = new BaseComponent('h3', ['page__number'], `Page #(${this.currentPage})`);
-    this.root.append(...[this.header.getNode(), this.pageNumber.getNode()]);
-    this.root.prepend(this.garageControls.getNode());
+    this.node.append(...[this.header.getNode(), this.pageNumber.getNode()]);
+    this.node.prepend(this.garageControls.getNode());
     return this.updateTable();
   }
 
@@ -75,7 +74,7 @@ export default class WinnersPage extends PageWithPagination implements PageContr
         row.prepend(new BaseComponent('td', [], (index + 1).toString()));
         this.winnersTable.setRow(row);
       });
-      this.root.append(this.winnersTable.getNode());
+      this.node.append(this.winnersTable.getNode());
     });
   }
 

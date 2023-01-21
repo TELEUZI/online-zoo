@@ -9,13 +9,13 @@ export default class Car extends BaseComponent {
 
   private name: string;
 
-  private carImage: HTMLElement;
+  private readonly carImage: HTMLElement;
 
-  private carName: BaseComponent;
+  private readonly carName: BaseComponent;
 
-  carNameUpdate: Input;
+  public readonly carNameUpdate: Input;
 
-  carColorUpdate: Input;
+  public readonly carColorUpdate: Input;
 
   constructor(name: string, color: string) {
     super('div', ['car-container']);
