@@ -24,19 +24,20 @@ module.exports = {
   resolve: {
     extensions: ['.tsx', '.ts', '.js'],
   },
-  plugins: [new HtmlWebpackPlugin(
-    {
+  plugins: [
+    new HtmlWebpackPlugin({
       template: './src/index.html',
-    }
-  )],
+    }),
+  ],
 
   mode: 'development',
   output: {
     filename: 'bundle.js',
     path: path.resolve(__dirname, 'dist'),
   },
+  devtool: 'inline-source-map',
   devServer: {
-    contentBase: path.join(__dirname, ''),
+    historyApiFallback: true,
     compress: true,
     port: 4001,
   },
