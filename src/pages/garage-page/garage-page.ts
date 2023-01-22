@@ -4,13 +4,12 @@ import ModalWindow from '../../components/pop-up/modal-window';
 import PopUpWindow from '../../components/pop-up/pop-up';
 import CarForm, { CarChars } from '../../components/reg-form/reg-form';
 import Timer from '../../components/timer/timer';
-import PageController from '../../interfaces/page-controller';
+import type PageController from '../../interfaces/page-controller';
 import PageWithPagination, { PAGINATION_LIMIT } from '../pagination-page';
-import CarTrack from './garage-components/car-track';
 import Garage from './garage/garage';
 import WinnerResultModel from '../../services/winners-service';
 import CarsService from '../../services/car-service';
-import ICar from '../../interfaces/car-api';
+import type { ICar } from '../../interfaces/car-api';
 
 const TIMER_DELAY = 0;
 

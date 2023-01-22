@@ -1,4 +1,4 @@
-import Button from '../components/button/button';
+import type Button from '../components/button/button';
 import BaseComponent from '../components/base-component';
 
 export const PAGINATION_LIMIT = 7;

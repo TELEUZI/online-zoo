@@ -1,5 +1,5 @@
-import NameRoute from '../enums/routes';
-import BaseComponent from '../components/base-component';
+import type NameRoute from '../enums/routes';
+import type BaseComponent from '../components/base-component';
 
 export interface Route {
   name: NameRoute;

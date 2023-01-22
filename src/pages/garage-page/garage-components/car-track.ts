@@ -4,7 +4,7 @@ import { deleteWinner } from '../../../api/winners-api';
 import BaseComponent from '../../../components/base-component';
 import Button from '../../../components/button/button';
 import Icon from '../../../components/menu/icon/icon';
-import ICar from '../../../interfaces/car-api';
+import type { ICar } from '../../../interfaces/car-api';
 import Car from './car';
 
 const VELOCITY_MULTIPLIER = 2;

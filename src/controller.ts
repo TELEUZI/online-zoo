@@ -1,6 +1,6 @@
 import BaseComponent from './components/base-component';
 import Menu from './components/menu/menu';
-import PageController from './interfaces/page-controller';
+import type PageController from './interfaces/page-controller';
 import Router from './router';
 import NameRoute from './enums/routes';
 

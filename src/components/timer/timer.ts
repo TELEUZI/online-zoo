@@ -1,4 +1,4 @@
-import Time from '../../interfaces/time';
+import type Time from '../../interfaces/time';
 import TimerModel from './timer-model';
 import TimerView from './timer-view';
 

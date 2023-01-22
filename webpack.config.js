@@ -1,8 +1,24 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
+const isProduction = process.env.NODE_ENV == 'production';
 
 module.exports = {
   entry: './src/app.ts',
+  optimization: {
+    runtimeChunk: 'single',
+    splitChunks: {
+      chunks: 'all',
+      cacheGroups: {
+        default: {
+          chunks: 'all',
+          enforce: true,
+          reuseExistingChunk: true,
+        },
+      },
+    },
+  },
   module: {
     rules: [
       {
@@ -13,12 +29,16 @@ module.exports = {
       {
         test: /\.(s[ac]|c)ss$/i,
         exclude: [/node_modules/],
-        use: ['style-loader', 'css-loader', 'sass-loader'],
+        use: [
+          isProduction ? MiniCssExtractPlugin.loader : 'style-loader',
+          'css-loader',
+          'sass-loader',
+        ],
       },
       {
         oneOf: [
           {
-            test: /car.svg$/,
+            test: /_inline.svg$/,
             type: 'asset/source',
           },
           {
@@ -34,16 +54,28 @@ module.exports = {
   },
   plugins: [
     new HtmlWebpackPlugin({
+      title: 'Async race',
       template: './src/index.html',
+      minify: {
+        collapseWhitespace: true,
+        removeComments: true,
+        removeRedundantAttributes: true,
+        removeScriptTypeAttributes: true,
+        removeStyleLinkTypeAttributes: true,
+        useShortDoctype: false,
+      },
     }),
+    new MiniCssExtractPlugin(),
+    ...(!isProduction ? [new ForkTsCheckerWebpackPlugin()] : []),
   ],
-
-  mode: 'development',
+  mode: isProduction ? 'production' : 'development',
   output: {
-    filename: 'bundle.js',
+    filename: '[name].js',
+    chunkFilename: '[id].[chunkhash].js',
     path: path.resolve(__dirname, 'dist'),
+    clean: true,
   },
-  devtool: 'inline-source-map',
+  devtool: isProduction ? 'inline-source-map' : false,
   devServer: {
     historyApiFallback: true,
     compress: true,

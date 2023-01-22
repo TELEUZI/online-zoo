@@ -1,4 +1,6 @@
 {
+  "include": [".eslintrc.js", "./**/*.ts", "./**/*.tsx", "./**/*.js", "./**/*.cjs", "./**/*.jsx"],
+  "exclude": ["node_modules"],
   "compilerOptions": {
     "experimentalDecorators": true,
     "outDir": "./dist/",
@@ -9,6 +11,28 @@
     "lib": ["DOM", "ESNext", "DOM.Iterable"],
     "allowJs": true,
     "strict": true,
-    "moduleResolution": "node"
+    "moduleResolution": "node",
+    "baseUrl": "src",
+    "rootDir": "./",
+    "typeRoots": ["./node_modules/@types", "./src/types"],
+    "paths": {
+      "@/*": ["./*"]
+    },
+    "isolatedModules": true,
+    "allowUnreachableCode": false,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "importsNotUsedAsValues": "error",
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitReturns": true,
+    "noImplicitThis": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "removeComments": true,
+    "resolveJsonModule": true,
+    "sourceMap": true,
+    "skipLibCheck": true,
+    "strictNullChecks": true,
+    "suppressImplicitAnyIndexErrors": true
   }
 }

@@ -1,6 +1,6 @@
 import { createCar, getCars } from '../api/car-api';
 import APIConstants from '../enums/api-constants';
-import ICar from '../interfaces/car-api';
+import type { ICar } from '../interfaces/car-api';
 import getRandomName, { getRandomColor } from '../utils/random-name-generator';
 
 export const NUMERIC_SYSTEM = 10;

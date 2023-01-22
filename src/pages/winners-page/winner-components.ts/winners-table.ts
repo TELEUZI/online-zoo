@@ -1,8 +1,8 @@
 import BaseComponent from '../../../components/base-component';
 import TableHead from '../../../components/table/table-head';
-import ICar from '../../../interfaces/car-api';
-import { WinnerInfo } from '../../../interfaces/winner-api';
-import CarWinner from './winner';
+import type { ICar } from '../../../interfaces/car-api';
+import type { WinnerInfo } from '../../../interfaces/winner-api';
+import type CarWinner from './winner';
 
 export default class WinnerResult extends BaseComponent {
   private body: BaseComponent;

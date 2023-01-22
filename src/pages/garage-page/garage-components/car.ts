@@ -1,4 +1,4 @@
-import carTemplate from '../../../assets/car.svg';
+import carTemplate from '../../../assets/car_inline.svg';
 import BaseComponent from '../../../components/base-component';
 import Input from '../../../components/input/input';
 

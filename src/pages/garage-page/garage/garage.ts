@@ -2,7 +2,7 @@ import CarsService from '../../../services/car-service';
 import BaseComponent from '../../../components/base-component';
 import Button from '../../../components/button/button';
 import CarTrack from '../garage-components/car-track';
-import ICar from '../../../interfaces/car-api';
+import type { ICar } from '../../../interfaces/car-api';
 
 export default class Garage extends BaseComponent {
   private raceButton: Button;

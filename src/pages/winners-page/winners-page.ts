@@ -1,12 +1,12 @@
 import BaseComponent from '../../components/base-component';
 import Button from '../../components/button/button';
-import PageController from '../../interfaces/page-controller';
+import type PageController from '../../interfaces/page-controller';
 import PageWithPagination, { PAGINATION_LIMIT_WINNERS } from '../pagination-page';
 import CarWinner from './winner-components.ts/winner';
 import WinnerResult from './winner-components.ts/winners-table';
 import WinnersService from '../../services/winners-service';
-import ICar from '../../interfaces/car-api';
-import { WinnerInfo } from '../../interfaces/winner-api';
+import type { ICar } from '../../interfaces/car-api';
+import type { WinnerInfo } from '../../interfaces/winner-api';
 import CellComponent from './winner-components.ts/cell';
 
 // eslint-disable-next-line import/prefer-default-export

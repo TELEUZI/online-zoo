@@ -1,7 +1,7 @@
-import BaseComponent from './components/base-component';
-import { Route } from './interfaces/route-names';
+import type BaseComponent from './components/base-component';
+import type { Route } from './interfaces/route-names';
 import NameRoute from './enums/routes';
-import PageWithPagination from './pages/pagination-page';
+import type PageWithPagination from './pages/pagination-page';
 
 export default class Router {
   static pageContainer: HTMLElement;

@@ -1,5 +1,5 @@
 import APIConstants from '../enums/api-constants';
-import { CarChars, DriveStatus } from '../interfaces/engine-api';
+import type { CarChars, DriveStatus } from '../interfaces/engine-api';
 
 const ENGINE_URL = `${APIConstants.baseUrl}/engine`;
 

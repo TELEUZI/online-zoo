@@ -1,5 +1,5 @@
 import APIConstants from '../enums/api-constants';
-import { WinnersInfo, WinnerInfo } from '../interfaces/winner-api';
+import type { WinnersInfo, WinnerInfo } from '../interfaces/winner-api';
 
 const WINNERS_URL = `${APIConstants.baseUrl}/winners`;
 
@@ -19,7 +19,7 @@ export async function getWinners(
   return { items: await response.json(), count: response.headers.get('X-Total-Count') ?? '0' };
 }
 
-export async function getWinner(id: number): Promise<WinnerInfo> {
+export async function getWinner(id: number): Promise<WinnerInfo | Record<string, never>> {
   return (await fetch(`${WINNERS_URL}/${id}`)).json();
 }
 
