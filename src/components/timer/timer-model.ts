@@ -9,7 +9,7 @@ export default class TimerModel {
 
   onTick: (value: Time) => void;
 
-  private interval: NodeJS.Timeout;
+  private interval: number;
 
   private minutes: number;
 
@@ -22,7 +22,7 @@ export default class TimerModel {
   }
 
   start = (): void => {
-    this.interval = setInterval(this.tick, MILLISECONDS_IN_ONE_SECOND);
+    this.interval = window.setInterval(this.tick, MILLISECONDS_IN_ONE_SECOND);
   };
 
   stop = (): void => {
