@@ -16,10 +16,12 @@ export default class CarWinner extends BaseComponent {
     this.car = new Car(name, color);
     this.wins = wins;
     this.bestTime = bestTime;
-    this.node.innerHTML += `
-    <td class="table__col">${this.car.getSVGInHTML()}</td>
+    this.node.insertAdjacentHTML(
+      'beforeend',
+      `<td class="table__col">${this.car.getSVGInHTML()}</td>
     <td class="table__col">${this.car.getName()}</td>
     <td class="table__col">${this.wins}</td>
-    <td class="table__col">${this.bestTime}</td>`;
+    <td class="table__col">${this.bestTime}</td>`,
+    );
   }
 }
