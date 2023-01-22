@@ -12,7 +12,7 @@
     "lint-staged": "npx lint-staged"
   },
   "lint-staged": {
-    "*.(ts|scss)": [
+    "*.(ts)": [
       "npm run lint-and-fix"
     ]
   },
@@ -23,7 +23,6 @@
   "author": "TELEUZI",
   "license": "ISC",
   "devDependencies": {
-    "@types/node": "^15.0.1",
     "@typescript-eslint/eslint-plugin": "^4.22.1",
     "@typescript-eslint/parser": "^4.22.1",
     "css-loader": "^5.2.4",
@@ -34,8 +33,10 @@
     "eslint-plugin-import": "^2.22.1",
     "eslint-plugin-prettier": "^3.4.0",
     "eslint-webpack-plugin": "^2.5.4",
+    "html-webpack-inline-svg-plugin": "^2.3.0",
     "html-webpack-plugin": "^5.5.0",
     "husky": "^8.0.0",
+    "inline-svgo-loader": "^4.0.0",
     "lint-staged": "^13.1.0",
     "prettier": "^2.2.1",
     "sass": "^1.26.10",

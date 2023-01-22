@@ -1,5 +1,6 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const HtmlWebpackInlineSVGPlugin = require('html-webpack-inline-svg-plugin');
 
 module.exports = {
   entry: './src/app.ts',
@@ -27,6 +28,9 @@ module.exports = {
   plugins: [
     new HtmlWebpackPlugin({
       template: './src/index.html',
+    }),
+    new HtmlWebpackInlineSVGPlugin({
+      inlineAll: true,
     }),
   ],
 

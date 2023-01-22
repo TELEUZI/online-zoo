@@ -1,27 +1,53 @@
 import BaseComponent from '../../../components/base-component';
 import Car from '../../garage-page/garage-components/car';
+import CellComponent from './cell';
 
 export default class CarWinner extends BaseComponent {
   private car: Car;
 
-  private readonly wins: number;
+  carImage: CellComponent;
 
-  private readonly bestTime: number;
+  carName: CellComponent;
 
-  private id: number;
+  winsAmount: CellComponent;
 
-  constructor(id: number, name: string, color: string, wins: number, bestTime: number) {
+  winnerBestTime: CellComponent;
+
+  constructor(
+    private name: string,
+    private color: string,
+    private wins: number,
+    private bestTime: number,
+  ) {
     super('tr', ['table__row']);
-    this.id = id;
+    this.updateData(name, color, wins, bestTime);
+    this.createRow();
+
+    this.appendChildren([this.carImage, this.carName, this.winsAmount, this.winnerBestTime]);
+  }
+
+  update(name: string, color: string, wins: number, bestTime: number): void {
+    this.updateData(name, color, wins, bestTime);
+    this.updateRow();
+  }
+
+  updateData(name: string, color: string, wins: number, bestTime: number): void {
     this.car = new Car(name, color);
     this.wins = wins;
     this.bestTime = bestTime;
-    this.node.insertAdjacentHTML(
-      'beforeend',
-      `<td class="table__col">${this.car.getSVGInHTML()}</td>
-    <td class="table__col">${this.car.getName()}</td>
-    <td class="table__col">${this.wins}</td>
-    <td class="table__col">${this.bestTime}</td>`,
-    );
+  }
+
+  createRow(): void {
+    this.carImage = new CellComponent('', this.car.getSVGInHTML());
+    this.carName = new CellComponent(this.car.getName());
+    this.winsAmount = new CellComponent(this.wins.toString());
+    this.winnerBestTime = new CellComponent(this.bestTime.toString());
+  }
+
+  updateRow(): void {
+    this.carImage.setHTML(this.car.getSVGInHTML());
+    this.carName.setContent(this.car.getName());
+    this.winsAmount.setContent(this.wins.toString());
+    this.winnerBestTime.setContent(this.bestTime.toString());
   }
 }

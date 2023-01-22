@@ -1,8 +1,13 @@
 import BaseComponent from '../../../components/base-component';
 import TableHead from '../../../components/table/table-head';
+import ICar from '../../../interfaces/car-api';
+import { WinnerInfo } from '../../../interfaces/winner-api';
+import CarWinner from './winner';
 
 export default class WinnerResult extends BaseComponent {
   private body: BaseComponent;
+
+  private rows: CarWinner[] = [];
 
   constructor(onWins?: () => void, onTime?: () => void) {
     super('table', ['table']);
@@ -23,11 +28,20 @@ export default class WinnerResult extends BaseComponent {
     this.insertChild(this.body);
   }
 
-  setRow(comp: BaseComponent): void {
+  setRow(comp: CarWinner): void {
     this.body.insertChild(comp);
+    this.rows.push(comp);
+  }
+
+  updateRow(data: ICar & WinnerInfo, index: number): void {
+    const row = this.rows[index];
+    if (row) {
+      row.update(data.name, data.color, data.wins, data.time);
+    }
   }
 
   clearBody(): void {
     this.body.destroyChildren();
+    this.rows = [];
   }
 }

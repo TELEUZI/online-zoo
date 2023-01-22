@@ -20,8 +20,6 @@ export default class CarTrack extends BaseComponent {
 
   deleteButton: Button;
 
-  editButton: Button;
-
   onUpdate: () => void;
 
   constructor(name: string, color: string, id: number) {

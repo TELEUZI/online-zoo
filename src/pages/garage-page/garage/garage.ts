@@ -1,34 +1,22 @@
-import GarageModel from './garage-model';
+import GarageModel from '../../../services/garage-model';
 import BaseComponent from '../../../components/base-component';
 import Button from '../../../components/button/button';
 import CarTrack from '../garage-components/car-track';
 
 export default class Garage extends BaseComponent {
-  onRaceStart: () => void;
-
-  onRaceEnd: (winnerCar: CarTrack) => void;
-
-  onPaginate: () => void;
-
-  carOnUpdate: () => void;
-
   private raceButton: Button;
 
   private stopButton: Button;
 
-  model: GarageModel;
+  private model: GarageModel;
 
   constructor(
-    onRaceStart: () => void,
-    onRaceEnd: (winnerCar: CarTrack) => void,
-    onPaginate: () => void,
-    carOnUpdate: () => void,
+    private onRaceStart: () => void,
+    private onRaceEnd: (winnerCar: CarTrack) => void,
+    private onPaginate: () => void,
+    private carOnUpdate: () => void,
   ) {
     super('div', ['garage']);
-    this.carOnUpdate = carOnUpdate;
-    this.onRaceStart = onRaceStart;
-    this.onRaceEnd = onRaceEnd;
-    this.onPaginate = onPaginate;
     this.model = new GarageModel();
     this.raceButton = new Button('Start Race', [], this.animateAllCars.bind(this));
     this.stopButton = new Button('Stop Race', [], this.stopAllCars.bind(this));
@@ -36,7 +24,7 @@ export default class Garage extends BaseComponent {
 
   async createGarage(page?: number): Promise<void> {
     this.stopButton.setAttribute('disabled', 'disabled');
-    this.node.innerHTML = '';
+    this.destroyChildren();
     this.onPaginate();
     const header = new BaseComponent(
       'h2',
@@ -68,7 +56,7 @@ export default class Garage extends BaseComponent {
   }
 
   updateGarage(): void {
-    this.node.innerHTML = '';
+    this.destroyChildren();
     this.carOnUpdate();
   }
 

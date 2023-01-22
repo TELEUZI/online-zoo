@@ -7,8 +7,9 @@ import Timer from '../../components/timer/timer';
 import PageController from '../../interfaces/page-controller';
 import PageWithPagination, { PAGINATION_LIMIT } from '../pagination-page';
 import CarTrack from './garage-components/car-track';
-import GaragePageModel from './garage-page-model';
+import GaragePageModel from '../../services/garage-page-model';
 import Garage from './garage/garage';
+import WinnerResultModel from '../../services/winner-result-model';
 
 const TIMER_DELAY = 0;
 
@@ -75,7 +76,7 @@ export class GaragePage extends PageWithPagination implements PageController {
   }
 
   handleRaceEnd = async (winner: CarTrack): Promise<void> => {
-    await GaragePageModel.createWinner(this.currentPage, winner, this.timer.getSeconds());
+    await WinnerResultModel.createWinner(this.currentPage, winner, this.timer.getSeconds());
     this.createWinPopup(
       `Первым пришёл водитель ${winner.getCar().getName()} за ${this.timer.getTime()}`,
     );

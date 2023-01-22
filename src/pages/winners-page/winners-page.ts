@@ -1,12 +1,12 @@
-import { getWinners } from '../../api/winners-api';
 import BaseComponent from '../../components/base-component';
 import Button from '../../components/button/button';
 import PageController from '../../interfaces/page-controller';
-import { NUMERIC_SYSTEM } from '../car-model';
 import PageWithPagination, { PAGINATION_LIMIT_WINNERS } from '../pagination-page';
 import CarWinner from './winner-components.ts/winner';
-import WinnerResultModel from './winner-components.ts/winner-result-model';
 import WinnerResult from './winner-components.ts/winners-table';
+import WinnersService from '../../services/winner-result-model';
+import ICar from '../../interfaces/car-api';
+import { WinnerInfo } from '../../interfaces/winner-api';
 
 // eslint-disable-next-line import/prefer-default-export
 export class WinnersPage extends PageWithPagination implements PageController {
@@ -14,7 +14,7 @@ export class WinnersPage extends PageWithPagination implements PageController {
 
   private winnersTable: WinnerResult;
 
-  private model: WinnerResultModel;
+  private model: WinnersService;
 
   private winSortType = 'ASC';
 
@@ -28,7 +28,6 @@ export class WinnersPage extends PageWithPagination implements PageController {
 
   constructor(record: Record<string, unknown>) {
     super();
-    this.model = new WinnerResultModel();
     this.currentPage = 1;
     this.winnersTable = new WinnerResult(
       this.sortTable.bind(this, 'wins'),
@@ -42,10 +41,7 @@ export class WinnersPage extends PageWithPagination implements PageController {
   }
 
   async getCount(): Promise<number> {
-    return parseInt(
-      (await getWinners(this.currentPage, this.paginationLimit)).count,
-      NUMERIC_SYSTEM,
-    );
+    return WinnersService.getCount(this.currentPage, this.paginationLimit);
   }
 
   async createPage(): Promise<void> {
@@ -59,17 +55,21 @@ export class WinnersPage extends PageWithPagination implements PageController {
   }
 
   async updateTable(): Promise<void> {
-    const winners = await this.model.getCars(this.currentPage, ...this.lastChosen);
-    this.createTableUI(winners);
+    const winners = await WinnersService.getWinners(this.currentPage, ...this.lastChosen);
+    const carWinners = winners.map(
+      ({ name, color, wins, time }) => new CarWinner(name, color, wins, time),
+    );
+
+    this.createTableUI(carWinners);
   }
 
   async sortTable(value = 'id'): Promise<void> {
     const winners = await this.getSorted(value);
-    this.winnersTable.clearBody();
-    this.createTableUI(winners);
+    this.recreateTableUI(winners);
   }
 
   createTableUI(winners: CarWinner[]): void {
+    this.winnersTable.clearBody();
     this.checkPaginationButtons().then(() => {
       this.pageNumber.setContent(`Page #(${this.currentPage})`);
       winners.forEach((row, index) => {
@@ -79,15 +79,17 @@ export class WinnersPage extends PageWithPagination implements PageController {
     });
   }
 
-  async getSorted(value: string): Promise<CarWinner[]> {
-    if (this.winSortType === 'ASC') {
-      this.winSortType = 'DESC';
-      this.lastChosen = [value, 'ASC'];
-      return this.model.getCars(this.currentPage, value, 'ASC');
-    }
-    this.winSortType = 'ASC';
-    this.lastChosen = [value, 'DESC'];
-    return this.model.getCars(this.currentPage, value, 'DESC');
+  recreateTableUI(winners: (ICar & WinnerInfo)[]): void {
+    winners.forEach((row, index) => {
+      this.winnersTable.updateRow(row, index);
+    });
+  }
+
+  async getSorted(value: string): Promise<(ICar & WinnerInfo)[]> {
+    const otherSortType = this.winSortType === 'ASC' ? 'DESC' : 'ASC';
+    this.winSortType = otherSortType;
+    this.lastChosen = [value, this.winSortType];
+    return WinnersService.getWinners(this.currentPage, value, this.winSortType);
   }
 
   async showNext(): Promise<void> {
