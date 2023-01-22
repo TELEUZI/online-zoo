@@ -1,23 +1,23 @@
-import GarageModel from '../../../services/garage-model';
+import CarsService from '../../../services/car-service';
 import BaseComponent from '../../../components/base-component';
 import Button from '../../../components/button/button';
 import CarTrack from '../garage-components/car-track';
+import ICar from '../../../interfaces/car-api';
 
 export default class Garage extends BaseComponent {
   private raceButton: Button;
 
   private stopButton: Button;
 
-  private model: GarageModel;
+  carTracks: CarTrack[];
 
   constructor(
     private onRaceStart: () => void,
-    private onRaceEnd: (winnerCar: CarTrack) => void,
+    private onRaceEnd: (winnerCar: ICar | null) => void,
     private onPaginate: () => void,
     private carOnUpdate: () => void,
   ) {
     super('div', ['garage']);
-    this.model = new GarageModel();
     this.raceButton = new Button('Start Race', [], this.animateAllCars.bind(this));
     this.stopButton = new Button('Stop Race', [], this.stopAllCars.bind(this));
   }
@@ -29,13 +29,14 @@ export default class Garage extends BaseComponent {
     const header = new BaseComponent(
       'h2',
       ['page__name'],
-      `Garage (${await this.model.getCarsCount()})`,
+      `Garage (${await CarsService.getCarsCount()})`,
     );
     const pageNumber = new BaseComponent('h3', ['page__number'], `Page #(${page})`);
-    const carTracks = await this.model.getCars(page);
+    const cars = await CarsService.getCars(page);
     const raceControls = new BaseComponent('div', ['garage__controls']);
     raceControls.appendChildren([this.stopButton, this.raceButton]);
-    carTracks.forEach((car) => {
+    this.carTracks = cars.map((car) => new CarTrack(car.name, car.color, car.id));
+    this.carTracks.forEach((car) => {
       car.setOnUpdate(this.updateGarage.bind(this));
       this.prepend(car);
     });
@@ -45,14 +46,12 @@ export default class Garage extends BaseComponent {
   async animateAllCars(): Promise<void> {
     this.toggleRaceMode();
     this.onRaceStart();
-    Promise.any(this.model.carTracks.map(async (car) => car.animateCar()))
-      .then((res: CarTrack) => this.onRaceEnd(res))
-      .catch();
+    Promise.any(this.carTracks.map((car) => car.animateCar())).then((res) => this.onRaceEnd(res));
   }
 
   async stopAllCars(): Promise<void> {
     this.toggleDefaultMode();
-    this.model.carTracks.forEach((car) => car.stopCarAnimation());
+    this.carTracks.forEach((car) => car.stopCarAnimation());
   }
 
   updateGarage(): void {

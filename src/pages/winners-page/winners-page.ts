@@ -4,9 +4,10 @@ import PageController from '../../interfaces/page-controller';
 import PageWithPagination, { PAGINATION_LIMIT_WINNERS } from '../pagination-page';
 import CarWinner from './winner-components.ts/winner';
 import WinnerResult from './winner-components.ts/winners-table';
-import WinnersService from '../../services/winner-result-model';
+import WinnersService from '../../services/winners-service';
 import ICar from '../../interfaces/car-api';
 import { WinnerInfo } from '../../interfaces/winner-api';
+import CellComponent from './winner-components.ts/cell';
 
 // eslint-disable-next-line import/prefer-default-export
 export class WinnersPage extends PageWithPagination implements PageController {
@@ -14,19 +15,17 @@ export class WinnersPage extends PageWithPagination implements PageController {
 
   private winnersTable: WinnerResult;
 
-  private model: WinnersService;
-
   private winSortType = 'ASC';
 
   private lastChosen: string[] = [];
 
   private garageControls: BaseComponent;
 
-  header: BaseComponent;
+  header!: BaseComponent;
 
-  pageNumber: BaseComponent;
+  pageNumber!: BaseComponent;
 
-  constructor(record: Record<string, unknown>) {
+  constructor() {
     super();
     this.currentPage = 1;
     this.winnersTable = new WinnerResult(
@@ -64,16 +63,16 @@ export class WinnersPage extends PageWithPagination implements PageController {
   }
 
   async sortTable(value = 'id'): Promise<void> {
-    const winners = await this.getSorted(value);
+    const winners = await this.getSortedBy(value);
     this.recreateTableUI(winners);
   }
 
   createTableUI(winners: CarWinner[]): void {
     this.winnersTable.clearBody();
-    this.checkPaginationButtons().then(() => {
+    this.updatePaginationButtons().then(() => {
       this.pageNumber.setContent(`Page #(${this.currentPage})`);
       winners.forEach((row, index) => {
-        row.prepend(new BaseComponent('td', [], (index + 1).toString()));
+        row.prepend(new CellComponent((index + 1).toString()));
         this.winnersTable.setRow(row);
       });
     });
@@ -85,7 +84,7 @@ export class WinnersPage extends PageWithPagination implements PageController {
     });
   }
 
-  async getSorted(value: string): Promise<(ICar & WinnerInfo)[]> {
+  async getSortedBy(value: string): Promise<(ICar & WinnerInfo)[]> {
     const otherSortType = this.winSortType === 'ASC' ? 'DESC' : 'ASC';
     this.winSortType = otherSortType;
     this.lastChosen = [value, this.winSortType];

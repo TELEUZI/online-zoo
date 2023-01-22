@@ -21,7 +21,7 @@ export default class Router {
         return component;
       });
     }
-    return Router.defaultComponent({});
+    return Router.defaultComponent();
   };
 
   private static pathToRegex = (path: NameRoute) =>
@@ -33,10 +33,10 @@ export default class Router {
     return Object.fromEntries(keys.map((key, i) => [key, values[i]]));
   };
 
-  private static defaultComponent = async (props: Record<string, string>) => {
+  private static defaultComponent = async () => {
     const { GaragePage } = await import('./pages/garage-page/garage-page');
 
-    return new GaragePage(props);
+    return new GaragePage();
   };
 
   static onPathChangeHandler = () => {

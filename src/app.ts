@@ -15,5 +15,9 @@ class App {
     this.root.appendChild(this.controller.getNode());
   }
 }
-const app: App = new App(document.body);
+const appElement = document.getElementById('app');
+if (!appElement) {
+  throw new Error('App container is not found');
+}
+const app: App = new App(appElement);
 app.start();

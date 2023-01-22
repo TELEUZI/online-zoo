@@ -18,17 +18,17 @@ export default class Controller extends BaseComponent {
     Router.init(this.appRoot.getNode(), [
       {
         name: NameRoute.Garage,
-        component: async (props) => {
+        component: async () => {
           const { GaragePage } = await import('./pages/garage-page/garage-page');
 
-          return new GaragePage(props);
+          return new GaragePage();
         },
       },
       {
         name: NameRoute.Winners,
-        component: async (props) => {
+        component: async () => {
           const { WinnersPage } = await import('./pages/winners-page/winners-page');
-          return new WinnersPage(props);
+          return new WinnersPage();
         },
       },
     ]);

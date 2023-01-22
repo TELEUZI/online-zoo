@@ -3,16 +3,14 @@ import { createWinner, getWinner, getWinners, updateWinner } from '../api/winner
 import APIConstants from '../enums/api-constants';
 import ICar from '../interfaces/car-api';
 import { WinnerInfo } from '../interfaces/winner-api';
-import CarTrack from '../pages/garage-page/garage-components/car-track';
-import CarWinner from '../pages/winners-page/winner-components.ts/winner';
 
 export default class WinnersService {
-  static async createWinner(page: number, car: CarTrack, time: number): Promise<void> {
-    const winner = await getWinner(car.getId());
+  static async createWinner(carId: number, time: number): Promise<void> {
+    const winner = await getWinner(carId);
     if (winner == null) {
-      await createWinner({ id: car.getId(), wins: 1, time });
+      await createWinner({ id: carId, wins: 1, time });
     } else {
-      await updateWinner(car.getId(), {
+      await updateWinner(carId, {
         wins: (winner.wins += 1),
         time: winner.time > time ? time : winner.time,
       });

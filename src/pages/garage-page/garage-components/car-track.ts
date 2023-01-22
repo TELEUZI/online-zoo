@@ -4,6 +4,7 @@ import { deleteWinner } from '../../../api/winners-api';
 import BaseComponent from '../../../components/base-component';
 import Button from '../../../components/button/button';
 import Icon from '../../../components/menu/icon/icon';
+import ICar from '../../../interfaces/car-api';
 import Car from './car';
 
 const VELOCITY_MULTIPLIER = 2;
@@ -20,9 +21,7 @@ export default class CarTrack extends BaseComponent {
 
   deleteButton: Button;
 
-  onUpdate: () => void;
-
-  constructor(name: string, color: string, id: number) {
+  constructor(name: string, color: string, id: number, private onUpdate?: () => void) {
     super('div', ['car-track']);
     this.id = id;
     this.car = new Car(name, color);
@@ -82,20 +81,24 @@ export default class CarTrack extends BaseComponent {
     this.car.setColor(color);
   }
 
-  async animateCar(): Promise<CarTrack | void> {
+  async animateCar(): Promise<ICar | null> {
     const chars = await startEngine(this.id);
     this.car.startAnimation(`${(chars.distance / chars.velocity) * VELOCITY_MULTIPLIER}ms`);
     this.stopButton.removeAttribute('disabled');
     this.startButton.setAttribute('disabled', 'disabled');
     return new Promise((resolve) =>
-      startDrive(this.id)
-        .then((res) => {
-          if (res.success) resolve(this);
-          else {
-            this.pauseAnimation();
-          }
-        })
-        .catch(),
+      startDrive(this.id).then((res) => {
+        if (res.success)
+          resolve({
+            id: this.id,
+            name: this.car.getName(),
+            color: this.car.getColor(),
+          });
+        else {
+          resolve(null);
+          this.pauseAnimation();
+        }
+      }),
     );
   }
 

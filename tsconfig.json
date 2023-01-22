@@ -8,6 +8,7 @@
     "jsx": "react",
     "lib": ["DOM", "ESNext", "DOM.Iterable"],
     "allowJs": true,
+    "strict": false,
     "moduleResolution": "node"
   }
 }
