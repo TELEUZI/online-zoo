@@ -1,4 +1,5 @@
 import Controller from './controller';
+import './normalize.css';
 
 class App {
   private root: HTMLElement;
