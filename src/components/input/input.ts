@@ -2,16 +2,16 @@ import ValidType from '../../enums/input-types';
 import BaseComponent from '../base-component';
 
 export default class Input extends BaseComponent {
-  onInput: (input: HTMLInputElement) => boolean;
+  onInput?: (input: HTMLInputElement) => boolean;
 
   protected input: HTMLInputElement;
 
-  isValid: boolean;
+  isValid = true;
 
   constructor(type: string, classlist: string[], placeholder?: string, value?: string | number) {
     super('input', ['input', ...classlist], '');
     this.input = <HTMLInputElement>this.node;
-    this.setAttributes(type, placeholder, value);
+    this.setAttributes(type, placeholder ?? '', value ?? '');
     this.createListeners();
   }
 
@@ -22,7 +22,7 @@ export default class Input extends BaseComponent {
   checkValidation(): void {
     if (this.onInput) {
       this.input.reportValidity();
-      this.isValid = this.onInput(this.input);
+      this.isValid = this?.onInput(this.input);
       this.input.classList.add(this.isValid ? ValidType.valid : ValidType.invalid);
       this.input.classList.remove(this.isValid ? ValidType.invalid : ValidType.valid);
     }

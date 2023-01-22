@@ -73,7 +73,7 @@ export default class CarTrack extends BaseComponent {
       .then(() => deleteCar(this.id))
       .then(() => {
         this.node.remove();
-        this.onUpdate();
+        this.onUpdate?.();
       });
   }
 
@@ -81,7 +81,7 @@ export default class CarTrack extends BaseComponent {
     this.car.setColor(color);
   }
 
-  async animateCar(): Promise<ICar | null> {
+  async animateCar(): Promise<ICar> {
     const chars = await startEngine(this.id);
     this.car.startAnimation(`${(chars.distance / chars.velocity) * VELOCITY_MULTIPLIER}ms`);
     this.stopButton.removeAttribute('disabled');
@@ -95,7 +95,6 @@ export default class CarTrack extends BaseComponent {
             color: this.car.getColor(),
           });
         else {
-          resolve(null);
           this.pauseAnimation();
         }
       }),

@@ -14,7 +14,7 @@ export default class MenuItem extends BaseComponent {
     super('li', ['menu__item'], '');
     this.href = href;
     this.link = new Link(textContent, href);
-    this.icon = new Icon(['menu-icon', iconClass]);
+    this.icon = new Icon(['menu-icon', iconClass ?? '']);
     this.insertChild(this.icon);
     this.insertChild(this.link);
   }

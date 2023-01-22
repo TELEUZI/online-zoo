@@ -58,8 +58,7 @@ export class GaragePage extends PageWithPagination implements PageController {
       paginationControls.appendChildren([this.nextPageButton, this.previousPageButton]);
       garageControls.appendChildren([this.randomCarsButton, paginationControls]);
       this.appendChildren([carFormLabel, this.form, garageControls, this.garage]);
-      this.popUp = new PopUpWindow('');
-      this.popUp.onOkClick = this.toggleModal.bind(this);
+      this.popUp = new PopUpWindow('', this.toggleModal.bind(this));
       this.modal = new ModalWindow(this.popUp, this.node);
       this.toggleModal();
     });

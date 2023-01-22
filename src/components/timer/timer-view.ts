@@ -7,8 +7,6 @@ export default class TimerView extends BaseComponent {
     this.setContent(START_TIME);
   }
 
-  onUpdate: () => void;
-
   setTime(currentTime: string): void {
     this.setContent(currentTime);
   }

@@ -63,7 +63,7 @@ export default class BaseComponent {
 
   addListener(
     event: string,
-    listener: (e?: Event) => void,
+    listener: (e: Event) => void,
     options: boolean | AddEventListenerOptions = false,
   ): void {
     this.node.addEventListener(event, listener, options);

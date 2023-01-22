@@ -1,8 +1,6 @@
 import BaseComponent from '../base-component';
 
 export default class ModalWindow extends BaseComponent {
-  onHeaderClick: () => void;
-
   private modalContent: BaseComponent;
 
   private modalWrapper: BaseComponent;

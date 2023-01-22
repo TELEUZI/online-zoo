@@ -9,11 +9,11 @@ export default class Garage extends BaseComponent {
 
   private stopButton: Button;
 
-  carTracks: CarTrack[];
+  carTracks: CarTrack[] = [];
 
   constructor(
     private onRaceStart: () => void,
-    private onRaceEnd: (winnerCar: ICar | null) => void,
+    private onRaceEnd: (winnerCar: ICar) => void,
     private onPaginate: () => void,
     private carOnUpdate: () => void,
   ) {
@@ -32,7 +32,7 @@ export default class Garage extends BaseComponent {
       `Garage (${await CarsService.getCarsCount()})`,
     );
     const pageNumber = new BaseComponent('h3', ['page__number'], `Page #(${page})`);
-    const cars = await CarsService.getCars(page);
+    const cars = await CarsService.getCars(page ?? 0);
     const raceControls = new BaseComponent('div', ['garage__controls']);
     raceControls.appendChildren([this.stopButton, this.raceButton]);
     this.carTracks = cars.map((car) => new CarTrack(car.name, car.color, car.id));

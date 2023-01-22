@@ -6,17 +6,17 @@ export interface CarChars {
   color: string;
 }
 export default class CarForm extends BaseComponent {
-  colorInput: Input;
+  colorInput!: Input;
 
-  submit: Input;
+  submit!: Input;
 
   inputs: Input[] = [];
 
-  onSubmit: (carChars: CarChars) => void;
+  onSubmit?: (carChars: CarChars) => void;
 
-  reset: Input;
+  reset!: Input;
 
-  carNameInput: Input;
+  carNameInput!: Input;
 
   constructor(classlist: string[]) {
     super('form', ['form', ...classlist], '');
@@ -36,7 +36,7 @@ export default class CarForm extends BaseComponent {
     this.submit.addListener('click', (e: Event) => {
       e.preventDefault();
       const [name, color] = [...this.inputs.map((input) => input.getValue())];
-      this?.onSubmit({ name, color });
+      this.onSubmit?.({ name, color });
       this.resetForm();
     });
   }

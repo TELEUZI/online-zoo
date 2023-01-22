@@ -8,15 +8,15 @@ function getSortOrder(sort: string, order: string) {
 }
 
 export async function getWinners(
-  page?: number,
+  page: number,
   limit = APIConstants.winnerCarLimit,
-  sort?: string,
-  order?: string,
+  sort = 'id',
+  order = 'ASC',
 ): Promise<WinnersInfo> {
   const response = await fetch(
     `${WINNERS_URL}?_page=${page}&limit=${limit}${getSortOrder(sort, order)}`,
   );
-  return { items: await response.json(), count: response.headers.get('X-Total-Count') };
+  return { items: await response.json(), count: response.headers.get('X-Total-Count') ?? '0' };
 }
 
 export async function getWinner(id: number): Promise<WinnerInfo> {
@@ -36,10 +36,10 @@ export async function createWinner(body: WinnerInfo): Promise<WinnerInfo> {
 }
 
 export async function deleteWinner(id: number): Promise<Record<string, never>> {
-  if ((await getWinners()).items.find((winners) => winners.id === id))
-    return (await fetch(`${WINNERS_URL}/${id}`, { method: 'DELETE' })).json();
-  return null;
+  //  if ((await getWinners()).items.find((winners) => winners.id === id))
+  return (await fetch(`${WINNERS_URL}/${id}`, { method: 'DELETE' })).json();
 }
+
 export async function updateWinner(
   id: number,
   body: { wins: number; time: number },

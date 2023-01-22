@@ -13,8 +13,4 @@ export default class Menu extends BaseComponent {
     );
     this.items.map((el) => this.insertChild(el));
   }
-
-  setCurrent(tabName: string): void {
-    this.items.find((item) => item.getHref() === tabName).toggleClass('current');
-  }
 }

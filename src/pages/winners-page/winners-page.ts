@@ -17,7 +17,7 @@ export class WinnersPage extends PageWithPagination implements PageController {
 
   private winSortType = 'ASC';
 
-  private lastChosen: string[] = [];
+  private lastChosen: [string?, string?] = [];
 
   private garageControls: BaseComponent;
 

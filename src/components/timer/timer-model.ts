@@ -7,9 +7,9 @@ const FIRST_DIGIT_IN_ARABIC_NUMERAL_SYSTEM = 0;
 export default class TimerModel {
   private currentTimeInSeconds: number;
 
-  onTick: (value: Time) => void;
+  onTick?: (value: Time) => void;
 
-  private interval: number;
+  private interval?: number;
 
   private minutes: number;
 

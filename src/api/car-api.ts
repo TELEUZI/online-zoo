@@ -8,7 +8,7 @@ export async function getCars(
   limit = APIConstants.garageCarLimit,
 ): Promise<CarApiResponse> {
   const response = await fetch(`${GARAGE_URL}?_page=${page}&_limit=${limit}`);
-  return { items: await response.json(), count: response.headers.get('X-Total-Count') };
+  return { items: await response.json(), count: response.headers.get('X-Total-Count') ?? '0' };
 }
 
 export async function getCar(id: number): Promise<ICar> {
