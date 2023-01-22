@@ -53,6 +53,8 @@ export class WinnersPage extends PageWithPagination implements PageController {
     this.pageNumber = new BaseComponent('h3', ['page__number'], `Page #(${this.currentPage})`);
     this.node.append(...[this.header.getNode(), this.pageNumber.getNode()]);
     this.node.prepend(this.garageControls.getNode());
+    this.node.append(this.winnersTable.getNode());
+
     return this.updateTable();
   }
 
@@ -63,18 +65,17 @@ export class WinnersPage extends PageWithPagination implements PageController {
 
   async sortTable(value = 'id'): Promise<void> {
     const winners = await this.getSorted(value);
+    this.winnersTable.clearBody();
     this.createTableUI(winners);
   }
 
   createTableUI(winners: CarWinner[]): void {
     this.checkPaginationButtons().then(() => {
       this.pageNumber.setContent(`Page #(${this.currentPage})`);
-      this.winnersTable.clearBody();
       winners.forEach((row, index) => {
         row.prepend(new BaseComponent('td', [], (index + 1).toString()));
         this.winnersTable.setRow(row);
       });
-      this.node.append(this.winnersTable.getNode());
     });
   }
 

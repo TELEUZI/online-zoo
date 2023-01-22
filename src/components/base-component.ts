@@ -72,4 +72,10 @@ export default class BaseComponent {
   destroy(): void {
     this.node.remove();
   }
+
+  destroyChildren(): void {
+    [...this.node.children].forEach((el) => {
+      el.remove();
+    });
+  }
 }
