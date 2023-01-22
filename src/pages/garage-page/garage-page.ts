@@ -81,7 +81,7 @@ export class GaragePage extends PageWithPagination implements PageController {
 
   private async getFormData(car: CarChars): Promise<void> {
     await this.updatePaginationButtons();
-    CarsService.createCar(car.name, car.color);
+    await CarsService.createCar(car.name, car.color);
     this.garage.updateGarage();
   }
 

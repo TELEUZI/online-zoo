@@ -1,8 +1,6 @@
-import carTemplate from '../../../assets/car-svg';
+import carTemplate from '../../../assets/car.svg';
 import BaseComponent from '../../../components/base-component';
 import Input from '../../../components/input/input';
-
-type SvgInHtml = HTMLElement & SVGElement;
 
 export default class Car extends BaseComponent {
   private color: string;
@@ -19,12 +17,13 @@ export default class Car extends BaseComponent {
 
   constructor(name: string, color: string) {
     super('div', ['car-container']);
-    const carInfoWrapper = new BaseComponent('div', ['car-container__info']);
-    this.carImage = document.createElement('svg') as SvgInHtml;
-    this.carImage.style.fill = color;
-    this.carImage.innerHTML = carTemplate;
     this.name = name;
     this.color = color;
+
+    const carInfoWrapper = new BaseComponent('div', ['car-container__info']);
+    this.carImage = new BaseComponent('div', ['car-container__image']).getNode();
+    this.carImage.innerHTML = carTemplate;
+    this.carImage.style.fill = color;
     this.carName = new BaseComponent('label', ['car-name'], name);
     this.carNameUpdate = new Input('text', ['task__input', 'hidden']);
     this.carColorUpdate = new Input('color', ['task__input', 'hidden']);
