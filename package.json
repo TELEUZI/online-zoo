@@ -1,18 +1,15 @@
 {
-  "name": "match-match-game",
+  "name": "race-game",
   "version": "1.0.0",
-  "description": "match-match game for RSS",
+  "description": "race game for RSS",
   "main": "index.ts",
   "scripts": {
     "build": "npx webpack --mode=production",
     "dev-server": "npx webpack serve --mode=development ",
     "lint": "npx eslint . --ext .ts",
-    "lint-and-fix": "npx eslint . --ext .ts --fix"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
+    "lint-and-fix": "npx eslint . --ext .ts --fix",
+    "prepare": "husky install",
+    "lint-staged": "npx lint-staged"
   },
   "lint-staged": {
     "*.(ts|scss)": [
@@ -38,7 +35,7 @@
     "eslint-plugin-prettier": "^3.4.0",
     "eslint-webpack-plugin": "^2.5.4",
     "html-webpack-plugin": "^5.5.0",
-    "husky": "^8.0.3",
+    "husky": "^8.0.0",
     "lint-staged": "^13.1.0",
     "prettier": "^2.2.1",
     "sass": "^1.26.10",
