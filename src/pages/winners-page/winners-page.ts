@@ -1,13 +1,13 @@
-import BaseComponent from '../../components/base-component';
-import Button from '../../components/button/button';
-import type PageController from '../../interfaces/page-controller';
+import BaseComponent from '@/components/base-component';
+import Button from '@/components/button/button';
+import type PageController from '@/interfaces/page-controller';
+import WinnersService from '@/services/winners-service';
+import type { ICar } from '@/interfaces/car-api';
+import type { WinnerInfo } from '@/interfaces/winner-api';
+import CellComponent from '@/components/table/cell';
+import WinnerResult from './winners-table/winners-table';
+import CarWinner from './winners-row/winner';
 import PageWithPagination, { PAGINATION_LIMIT_WINNERS } from '../pagination-page';
-import CarWinner from './winner-components.ts/winner';
-import WinnerResult from './winner-components.ts/winners-table';
-import WinnersService from '../../services/winners-service';
-import type { ICar } from '../../interfaces/car-api';
-import type { WinnerInfo } from '../../interfaces/winner-api';
-import CellComponent from './winner-components.ts/cell';
 
 // eslint-disable-next-line import/prefer-default-export
 export class WinnersPage extends PageWithPagination implements PageController {
@@ -85,8 +85,7 @@ export class WinnersPage extends PageWithPagination implements PageController {
   }
 
   async getSortedBy(value: string): Promise<(ICar & WinnerInfo)[]> {
-    const otherSortType = this.winSortType === 'ASC' ? 'DESC' : 'ASC';
-    this.winSortType = otherSortType;
+    this.winSortType = this.winSortType === 'ASC' ? 'DESC' : 'ASC';
     this.lastChosen = [value, this.winSortType];
     return WinnersService.getWinners(this.currentPage, value, this.winSortType);
   }

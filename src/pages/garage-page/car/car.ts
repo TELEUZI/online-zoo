@@ -7,7 +7,7 @@ export default class Car extends BaseComponent {
 
   private name: string;
 
-  private readonly carImage: HTMLElement;
+  readonly carImage: HTMLElement;
 
   private readonly carName: BaseComponent;
 
@@ -67,10 +67,15 @@ export default class Car extends BaseComponent {
     this.carImage.style.animationPlayState = 'paused';
   }
 
-  setUpdateMode(): void {
+  toggleUpdateMode(): void {
     this.carName.toggleClass('hidden');
     this.carNameUpdate.toggleClass('hidden');
     this.carColorUpdate.toggleClass('hidden');
+  }
+
+  updateValuesFromForm(): void {
+    this.setName(this.carNameUpdate.getValue());
+    this.setColor(this.carColorUpdate.getValue());
   }
 
   getSVGInHTML(): string {

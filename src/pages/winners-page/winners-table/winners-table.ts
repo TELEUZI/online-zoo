@@ -1,29 +1,29 @@
-import BaseComponent from '../../../components/base-component';
-import TableHead from '../../../components/table/table-head';
-import type { ICar } from '../../../interfaces/car-api';
-import type { WinnerInfo } from '../../../interfaces/winner-api';
-import type CarWinner from './winner';
+import type { ICar } from '@/interfaces/car-api';
+import type { WinnerInfo } from '@/interfaces/winner-api';
+import BaseComponent from '@/components/base-component';
+import TableHead from '@/components/table/table-head';
+import type CarWinner from '../winners-row/winner';
 
 export default class WinnerResult extends BaseComponent {
   private body: BaseComponent;
 
   private rows: CarWinner[] = [];
 
-  constructor(onWins?: () => void, onTime?: () => void) {
+  constructor(onWinsClick?: () => void, onTimeClick?: () => void) {
     super('table', ['table']);
     this.body = new BaseComponent('tbody');
     const head = new BaseComponent('thead');
-    const headrow = new BaseComponent('tr');
+    const headRow = new BaseComponent('tr');
 
     const headers = [
       new TableHead('Number'),
       new TableHead('Car'),
       new TableHead('Name'),
-      new TableHead('Wins', onWins),
-      new TableHead('Best time (seconds)', onTime),
+      new TableHead('Wins', onWinsClick),
+      new TableHead('Best time (seconds)', onTimeClick),
     ];
-    headrow.appendChildren(headers);
-    head.insertChild(headrow);
+    headRow.appendChildren(headers);
+    head.insertChild(headRow);
     this.insertChild(head);
     this.insertChild(this.body);
   }

@@ -1,7 +1,7 @@
-import { createCar, getCars } from '../api/car-api';
-import APIConstants from '../enums/api-constants';
-import type { ICar } from '../interfaces/car-api';
-import getRandomName, { getRandomColor } from '../utils/random-name-generator';
+import { createCar, deleteCar, getCars, updateCar } from '@/api/car-api';
+import type { CarApiResponse, ICar } from '@/interfaces/car-api';
+import APIConstants from '@/enums/api-constants';
+import getRandomName, { getRandomColor } from '@/utils/random-name-generator';
 
 export const NUMERIC_SYSTEM = 10;
 export default abstract class CarsService {
@@ -24,5 +24,16 @@ export default abstract class CarsService {
 
   static async createCar(name: string, color: string): Promise<void> {
     await createCar({ name, color });
+  }
+
+  static deleteCar(id: number): Promise<CarApiResponse> {
+    return deleteCar(id);
+  }
+
+  static updateCar(id: number, name: string, color: string): Promise<CarApiResponse> {
+    return updateCar(id, {
+      name,
+      color,
+    });
   }
 }

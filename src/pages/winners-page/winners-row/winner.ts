@@ -1,6 +1,6 @@
-import BaseComponent from '../../../components/base-component';
-import Car from '../../garage-page/garage-components/car';
-import CellComponent from './cell';
+import CellComponent from '@/components/table/cell';
+import BaseComponent from '@/components/base-component';
+import Car from '@/pages/garage-page/car/car';
 
 export default class CarWinner extends BaseComponent {
   private car!: Car;
@@ -16,7 +16,10 @@ export default class CarWinner extends BaseComponent {
   constructor(name: string, color: string, private wins: number, private bestTime: number) {
     super('tr', ['table__row']);
     this.updateData(name, color, wins, bestTime);
-    this.createCells();
+    this.carImage = new CellComponent('', this.car.getSVGInHTML());
+    this.carName = new CellComponent(this.car.getName());
+    this.winsAmount = new CellComponent(this.wins.toString());
+    this.winnerBestTime = new CellComponent(this.bestTime.toString());
     this.appendChildren([this.carImage, this.carName, this.winsAmount, this.winnerBestTime]);
   }
 
@@ -29,13 +32,6 @@ export default class CarWinner extends BaseComponent {
     this.car = new Car(name, color);
     this.wins = wins;
     this.bestTime = bestTime;
-  }
-
-  private createCells(): void {
-    this.carImage = new CellComponent('', this.car.getSVGInHTML());
-    this.carName = new CellComponent(this.car.getName());
-    this.winsAmount = new CellComponent(this.wins.toString());
-    this.winnerBestTime = new CellComponent(this.bestTime.toString());
   }
 
   private updateRow(): void {
