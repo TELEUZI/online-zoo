@@ -3,19 +3,21 @@ import BaseComponent from '@/components/base-component';
 import Car from '@/pages/garage-page/car/car';
 
 export default class CarWinner extends BaseComponent {
-  private car!: Car;
+  private car: Car;
 
-  private carImage!: CellComponent;
+  private readonly carImage: CellComponent;
 
-  private carName!: CellComponent;
+  private readonly carName: CellComponent;
 
-  private winsAmount!: CellComponent;
+  private readonly winsAmount: CellComponent;
 
-  private winnerBestTime!: CellComponent;
+  private readonly winnerBestTime: CellComponent;
 
   constructor(name: string, color: string, private wins: number, private bestTime: number) {
     super('tr', ['table__row']);
-    this.updateData(name, color, wins, bestTime);
+    this.car = new Car(name, color);
+    this.wins = wins;
+    this.bestTime = bestTime;
     this.carImage = new CellComponent('', this.car.getSVGInHTML());
     this.carName = new CellComponent(this.car.getName());
     this.winsAmount = new CellComponent(this.wins.toString());
@@ -24,14 +26,11 @@ export default class CarWinner extends BaseComponent {
   }
 
   update(name: string, color: string, wins: number, bestTime: number): void {
-    this.updateData(name, color, wins, bestTime);
-    this.updateRow();
-  }
-
-  private updateData(name: string, color: string, wins: number, bestTime: number): void {
-    this.car = new Car(name, color);
+    this.car.setColor(color);
+    this.car.setName(name);
     this.wins = wins;
     this.bestTime = bestTime;
+    this.updateRow();
   }
 
   private updateRow(): void {

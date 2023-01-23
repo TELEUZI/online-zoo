@@ -5,7 +5,7 @@ import TableHead from '@/components/table/table-head';
 import type CarWinner from '../winners-row/winner';
 
 export default class WinnerResult extends BaseComponent {
-  private body: BaseComponent;
+  private readonly body: BaseComponent;
 
   private rows: CarWinner[] = [];
 

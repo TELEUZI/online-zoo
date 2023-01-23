@@ -10,11 +10,11 @@ import Car from '../car/car';
 
 const VELOCITY_MULTIPLIER = 2;
 export default class CarTrack extends BaseComponent {
-  private car: Car;
+  private readonly car: Car;
 
-  private animationControls: AnimationControls;
+  private readonly animationControls: AnimationControls;
 
-  private id: number;
+  private readonly id: number;
 
   updateButton: EditButton;
 

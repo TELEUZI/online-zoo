@@ -12,7 +12,7 @@ import PageWithPagination, { PAGINATION_LIMIT_WINNERS } from '../pagination-page
 export class WinnersPage extends PageWithPagination {
   paginationLimit = PAGINATION_LIMIT_WINNERS;
 
-  private winnersTable: WinnerResult;
+  private readonly winnersTable: WinnerResult;
 
   private winSortType = 'ASC';
 

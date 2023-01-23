@@ -14,7 +14,7 @@ import PageWithPagination, { PAGINATION_LIMIT } from '../pagination-page';
 const TIMER_DELAY = 0;
 
 export class GaragePage extends PageWithPagination {
-  private garage: Garage;
+  private readonly garage: Garage;
 
   private form!: CarForm;
 
@@ -42,32 +42,28 @@ export class GaragePage extends PageWithPagination {
       this.showPrevious.bind(this),
       ['page__controls_pagination'],
     );
+    this.form = new CarForm(['car-form']);
+    this.form.onSubmit = this.getFormData.bind(this);
+    this.randomCarsButton = new Button(
+      'Generate random cars',
+      ['page__controls_random-cars'],
+      this.createRandomCars.bind(this),
+    );
+    this.timer = new Timer();
+    const garageControls = new BaseComponent('div', ['page__controls']);
+    const carFormLabel = new BaseComponent('h2', ['form-explanation'], 'Create new car!');
+    garageControls.appendChildren([this.randomCarsButton, this.paginationControls]);
+    this.appendChildren([carFormLabel, this.form, garageControls, this.garage]);
+    this.popUp = new PopUpWindow('', this.toggleModal.bind(this));
+    this.modal = new ModalWindow(this.popUp, this.node);
+    this.toggleModal();
     this.createPage();
   }
 
   async createPage(): Promise<void> {
-    this.garage
-      .createGarage(this.currentPage)
-      .then(() => {
-        this.updatePaginationButtons();
-      })
-      .then(() => {
-        this.form = new CarForm(['car-form']);
-        this.form.onSubmit = this.getFormData.bind(this);
-        this.randomCarsButton = new Button(
-          'Generate random cars',
-          ['page__controls_random-cars'],
-          this.createRandomCars.bind(this),
-        );
-        this.timer = new Timer();
-        const garageControls = new BaseComponent('div', ['page__controls']);
-        const carFormLabel = new BaseComponent('h2', ['form-explanation'], 'Create new car!');
-        garageControls.appendChildren([this.randomCarsButton, this.paginationControls]);
-        this.appendChildren([carFormLabel, this.form, garageControls, this.garage]);
-        this.popUp = new PopUpWindow('', this.toggleModal.bind(this));
-        this.modal = new ModalWindow(this.popUp, this.node);
-        this.toggleModal();
-      });
+    this.garage.createGarage(this.currentPage).then(() => {
+      this.updatePaginationButtons();
+    });
   }
 
   async getCount(): Promise<number> {

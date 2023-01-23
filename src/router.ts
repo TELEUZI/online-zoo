@@ -39,7 +39,7 @@ export default class Router {
     return new GaragePage();
   };
 
-  static onPathChangeHandler = () => {
+  static onPathChangeHandler: () => void = () => {
     const path = window.location.pathname;
 
     const route = Router.routes.find((r) => Router.pathToRegex(r.name).test(path));
@@ -62,14 +62,14 @@ export default class Router {
     );
   };
 
-  static init(pageContainer: HTMLElement, routes: Route[]) {
+  static init(pageContainer: HTMLElement, routes: Route[]): void {
     this.pageContainer = pageContainer;
     this.routes = routes;
     window.addEventListener('popstate', this.onPathChangeHandler);
     this.onPathChangeHandler();
   }
 
-  static destroy() {
+  static destroy(): void {
     window.removeEventListener('popstate', this.onPathChangeHandler);
   }
 }

@@ -1,9 +1,9 @@
 import BaseComponent from '../base-component';
 
 export default class ModalWindow extends BaseComponent {
-  private modalContent: BaseComponent;
+  private readonly modalContent: BaseComponent;
 
-  private modalWrapper: BaseComponent;
+  private readonly modalWrapper: BaseComponent;
 
   constructor(modalContent: BaseComponent, parentNode?: HTMLElement) {
     super('div', ['modal']);
@@ -19,9 +19,5 @@ export default class ModalWindow extends BaseComponent {
 
   toggleModal(): void {
     this.toggleClass('hidden');
-  }
-
-  getModalWrapper(): BaseComponent {
-    return this.modalWrapper;
   }
 }

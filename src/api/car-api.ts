@@ -1,5 +1,5 @@
+import type { CarApiResponse, ICar } from '@/interfaces/car-api';
 import APIConstants from '../enums/api-constants';
-import type { CarApiResponse, ICar } from '../interfaces/car-api';
 
 const GARAGE_URL = `${APIConstants.baseUrl}/garage`;
 

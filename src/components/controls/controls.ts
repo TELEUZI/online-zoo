@@ -15,7 +15,7 @@ export default abstract class Controls extends BaseComponent {
 
   protected readonly stopButton: Button;
 
-  constructor(
+  protected constructor(
     onStart: () => Promise<unknown>,
     onStop: () => Promise<unknown>,
     containerClasses: string[] = [],

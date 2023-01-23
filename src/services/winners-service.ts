@@ -1,8 +1,8 @@
-import { getCar } from '../api/car-api';
-import { createWinner, getWinner, getWinners, updateWinner } from '../api/winners-api';
-import APIConstants from '../enums/api-constants';
-import type { ICar } from '../interfaces/car-api';
-import type { WinnerInfo } from '../interfaces/winner-api';
+import { getCar } from '@/api/car-api';
+import { createWinner, getWinner, getWinners, updateWinner } from '@/api/winners-api';
+import type { ICar } from '@/interfaces/car-api';
+import type { WinnerInfo } from '@/interfaces/winner-api';
+import APIConstants from '@/enums/api-constants';
 
 export default class WinnersService {
   static async createWinner(carId: number, time: number): Promise<void> {
