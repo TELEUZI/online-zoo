@@ -1,11 +1,14 @@
 {
   "name": "race-game",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "race game for RSS",
   "main": "index.ts",
+  "repository": {
+    "url": "git+https://github.com/TELEUZI/race-game.git"
+  },
   "scripts": {
-    "build": "npx webpack --mode=production",
-    "dev-server": "npx webpack serve --mode=development ",
+    "build": "cross-env NODE_ENV=production webpack",
+    "dev-server": "cross-env NODE_ENV=development webpack serve",
     "lint": "npx eslint . --ext .ts",
     "lint-and-fix": "npx eslint . --ext .ts --fix",
     "prepare": "husky install",
@@ -26,6 +29,7 @@
     "@typescript-eslint/eslint-plugin": "^4.22.1",
     "@typescript-eslint/parser": "^4.22.1",
     "css-loader": "^5.2.4",
+    "cross-env": "^7.0.3",
     "eslint": "^7.26.0",
     "eslint-config-airbnb-base": "^14.2.1",
     "eslint-config-airbnb-typescript": "^12.3.1",

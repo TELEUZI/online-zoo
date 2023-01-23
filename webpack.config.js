@@ -78,7 +78,7 @@ module.exports = {
     path: path.resolve(__dirname, 'dist'),
     clean: true,
   },
-  devtool: isProduction ? 'inline-source-map' : false,
+  devtool: isProduction ? false : 'inline-source-map',
   devServer: {
     historyApiFallback: true,
     compress: true,
