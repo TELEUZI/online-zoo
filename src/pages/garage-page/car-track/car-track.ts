@@ -16,9 +16,9 @@ export default class CarTrack extends BaseComponent {
 
   private readonly id: number;
 
-  updateButton: EditButton;
+  private readonly updateButton: EditButton;
 
-  deleteButton: Button;
+  private readonly deleteButton: Button;
 
   constructor({ id, name, color }: ICar, private onUpdate?: () => void) {
     super('div', ['car-track']);
@@ -54,7 +54,7 @@ export default class CarTrack extends BaseComponent {
     });
   }
 
-  deleteCar(): void {
+  private deleteCar(): void {
     CarsService.deleteCar(this.id).then(() => {
       this.destroy();
       this.onUpdate?.();

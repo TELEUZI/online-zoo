@@ -40,17 +40,15 @@ export class WinnersPage extends PageWithPagination {
     this.pageNumber = new BaseComponent('h3', ['page__number'], `Page #(${this.currentPage})`);
     this.appendChildren([this.paginationControls, this.header, this.pageNumber, this.winnersTable]);
 
-    this.getCount()
-      .then((count) => {
-        this.header.setContent(`Winners (${count})`);
-      })
-      .then(() => {
-        return this.updateTable();
-      });
+    WinnersService.winnersCount.subscribe((count) => {
+      this.header.setContent(`Winners (${count})`);
+    });
+
+    this.updateTable();
   }
 
   async getCount(): Promise<number> {
-    return WinnersService.getCount(this.currentPage, this.paginationLimit);
+    return WinnersService.getCount();
   }
 
   async updateTable(): Promise<void> {
@@ -73,7 +71,7 @@ export class WinnersPage extends PageWithPagination {
       this.pageNumber.setContent(`Page #(${this.currentPage})`);
       winners.forEach((row, index) => {
         row.prepend(new CellComponent((index + 1).toString()));
-        this.winnersTable.setRow(row);
+        this.winnersTable.pushRow(row);
       });
     });
   }

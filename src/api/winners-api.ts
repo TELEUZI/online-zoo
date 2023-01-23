@@ -1,5 +1,6 @@
 import APIConstants from '@/enums/api-constants';
 import type { WinnersInfo, WinnerInfo } from '@/interfaces/winner-api';
+import { PAGINATION_LIMIT_WINNERS } from '@/pages/pagination-page';
 
 const WINNERS_URL = `${APIConstants.baseUrl}/winners`;
 
@@ -9,12 +10,12 @@ function getSortOrder(sort: string, order: string) {
 
 export async function getWinners(
   page: number,
-  limit = APIConstants.winnerCarLimit,
+  limit = PAGINATION_LIMIT_WINNERS,
   sort = 'id',
   order = 'ASC',
 ): Promise<WinnersInfo> {
   const response = await fetch(
-    `${WINNERS_URL}?_page=${page}&limit=${limit}${getSortOrder(sort, order)}`,
+    `${WINNERS_URL}?_page=${page}&_limit=${limit}${getSortOrder(sort, order)}`,
   );
   return { items: await response.json(), count: response.headers.get('X-Total-Count') ?? '0' };
 }
@@ -40,7 +41,6 @@ export async function deleteWinner(id: number): Promise<Record<string, never>> {
     const response = await fetch(`${WINNERS_URL}/${id}`, { method: 'DELETE' });
     return await response.json();
   } catch (error) {
-    console.log(error);
     return {};
   }
 }

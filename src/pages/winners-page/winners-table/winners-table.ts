@@ -28,7 +28,7 @@ export default class WinnerResult extends BaseComponent {
     this.insertChild(this.body);
   }
 
-  setRow(comp: CarWinner): void {
+  pushRow(comp: CarWinner): void {
     this.body.insertChild(comp);
     this.rows.push(comp);
   }

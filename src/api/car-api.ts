@@ -1,11 +1,12 @@
 import type { CarApiResponse, ICar } from '@/interfaces/car-api';
+import { PAGINATION_LIMIT_GARAGE } from '@/pages/pagination-page';
 import APIConstants from '../enums/api-constants';
 
 const GARAGE_URL = `${APIConstants.baseUrl}/garage`;
 
 export async function getCars(
   page: number,
-  limit = APIConstants.garageCarLimit,
+  limit = PAGINATION_LIMIT_GARAGE,
 ): Promise<CarApiResponse> {
   const response = await fetch(`${GARAGE_URL}?_page=${page}&_limit=${limit}`);
   return { items: await response.json(), count: response.headers.get('X-Total-Count') ?? '0' };

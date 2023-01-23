@@ -3,7 +3,7 @@ import BaseComponent from '@/components/base-component';
 import Car from '@/pages/garage-page/car/car';
 
 export default class CarWinner extends BaseComponent {
-  private car: Car;
+  private readonly car: Car;
 
   private readonly carImage: CellComponent;
 

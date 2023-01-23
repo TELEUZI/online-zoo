@@ -9,24 +9,22 @@ import WinnerResultModel from '@/services/winners-service';
 import CarsService from '@/services/car-service';
 import type { ICar } from '@/interfaces/car-api';
 import Garage from './garage/garage';
-import PageWithPagination, { PAGINATION_LIMIT } from '../pagination-page';
+import PageWithPagination from '../pagination-page';
 
 const TIMER_DELAY = 0;
 
 export class GaragePage extends PageWithPagination {
   private readonly garage: Garage;
 
-  private form!: CarForm;
+  private readonly form: CarForm;
 
-  paginationLimit = PAGINATION_LIMIT;
+  private readonly popUp: PopUpWindow;
 
-  private popUp!: PopUpWindow;
+  private readonly modal: ModalWindow;
 
-  private modal!: ModalWindow;
+  private readonly timer: Timer;
 
-  private timer!: Timer;
-
-  private randomCarsButton!: Button;
+  private readonly randomCarsButton: Button;
 
   paginationControls: PaginationControls;
 
@@ -54,20 +52,17 @@ export class GaragePage extends PageWithPagination {
     const carFormLabel = new BaseComponent('h2', ['form-explanation'], 'Create new car!');
     garageControls.appendChildren([this.randomCarsButton, this.paginationControls]);
     this.appendChildren([carFormLabel, this.form, garageControls, this.garage]);
+
     this.popUp = new PopUpWindow('', this.toggleModal.bind(this));
     this.modal = new ModalWindow(this.popUp, this.node);
     this.toggleModal();
-    this.createPage();
-  }
-
-  async createPage(): Promise<void> {
     this.garage.createGarage(this.currentPage).then(() => {
-      this.updatePaginationButtons();
+      return this.updatePaginationButtons();
     });
   }
 
   async getCount(): Promise<number> {
-    return CarsService.getCarsCount(this.currentPage);
+    return CarsService.getCarsCount();
   }
 
   private handleRaceEnd = async (winner: ICar): Promise<void> => {
@@ -84,23 +79,23 @@ export class GaragePage extends PageWithPagination {
   private async getFormData(car: CarChars): Promise<void> {
     await this.updatePaginationButtons();
     await CarsService.createCar(car.name, car.color);
-    return this.garage.updateGarage(this.currentPage);
+    return this.garage.updateGarageWithPagination(this.currentPage);
   }
 
   private showNext(): Promise<void> {
     this.currentPage += 1;
-    return this.garage.updateGarage(this.currentPage);
+    return this.garage.updateTracksNumber(this.currentPage);
   }
 
   private createRandomCars(): Promise<void> {
     return CarsService.createCars().then(() => {
-      return this.garage.updateGarage(this.currentPage);
+      return this.garage.updateGarageWithPagination(this.currentPage);
     });
   }
 
   private async showPrevious(): Promise<void> {
     this.currentPage -= 1;
-    return this.garage.updateGarage(this.currentPage);
+    return this.garage.updateTracksNumber(this.currentPage);
   }
 
   private toggleModal(): void {
