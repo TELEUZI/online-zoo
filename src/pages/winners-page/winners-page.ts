@@ -1,16 +1,15 @@
 import BaseComponent from '@/components/base-component';
-import Button from '@/components/button/button';
-import type PageController from '@/interfaces/page-controller';
 import WinnersService from '@/services/winners-service';
 import type { ICar } from '@/interfaces/car-api';
 import type { WinnerInfo } from '@/interfaces/winner-api';
 import CellComponent from '@/components/table/cell';
+import PaginationControls from '@/components/controls/pagination-controls/pagination-controls';
 import WinnerResult from './winners-table/winners-table';
 import CarWinner from './winners-row/winner';
 import PageWithPagination, { PAGINATION_LIMIT_WINNERS } from '../pagination-page';
 
 // eslint-disable-next-line import/prefer-default-export
-export class WinnersPage extends PageWithPagination implements PageController {
+export class WinnersPage extends PageWithPagination {
   paginationLimit = PAGINATION_LIMIT_WINNERS;
 
   private winnersTable: WinnerResult;
@@ -19,7 +18,7 @@ export class WinnersPage extends PageWithPagination implements PageController {
 
   private lastChosen: [string?, string?] = [];
 
-  private garageControls: BaseComponent;
+  protected paginationControls: PaginationControls;
 
   header!: BaseComponent;
 
@@ -32,25 +31,26 @@ export class WinnersPage extends PageWithPagination implements PageController {
       this.sortTable.bind(this, 'wins'),
       this.sortTable.bind(this, 'time'),
     );
-    this.nextPageButton = new Button('Next page', [], this.showNext.bind(this));
-    this.previousPageButton = new Button('Previous page', [], this.showPrevious.bind(this));
-    this.garageControls = new BaseComponent('div', ['garage__controls']);
-    this.garageControls.appendChildren([this.nextPageButton, this.previousPageButton]);
-    this.createPage();
+    this.paginationControls = new PaginationControls(
+      this.showNext.bind(this),
+      this.showPrevious.bind(this),
+      ['page__controls_pagination', 'garage__controls'],
+    );
+    this.header = new BaseComponent('h2', ['page__name']);
+    this.pageNumber = new BaseComponent('h3', ['page__number'], `Page #(${this.currentPage})`);
+    this.appendChildren([this.paginationControls, this.header, this.pageNumber, this.winnersTable]);
+
+    this.getCount()
+      .then((count) => {
+        this.header.setContent(`Winners (${count})`);
+      })
+      .then(() => {
+        return this.updateTable();
+      });
   }
 
   async getCount(): Promise<number> {
     return WinnersService.getCount(this.currentPage, this.paginationLimit);
-  }
-
-  async createPage(): Promise<void> {
-    this.header = new BaseComponent('h2', ['page__name'], `Winners (${await this.getCount()})`);
-    this.pageNumber = new BaseComponent('h3', ['page__number'], `Page #(${this.currentPage})`);
-    this.node.append(...[this.header.getNode(), this.pageNumber.getNode()]);
-    this.node.prepend(this.garageControls.getNode());
-    this.node.append(this.winnersTable.getNode());
-
-    return this.updateTable();
   }
 
   async updateTable(): Promise<void> {

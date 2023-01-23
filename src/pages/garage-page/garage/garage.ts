@@ -1,4 +1,4 @@
-import AnimationControls from '@/pages/garage-page/animation-controls/animation-controls';
+import AnimationControls from '@/components/controls/animation-controls/animation-controls';
 import CarsService from '@/services/car-service';
 import BaseComponent from '@/components/base-component';
 import type { ICar } from '@/interfaces/car-api';
@@ -15,7 +15,6 @@ export default class Garage extends BaseComponent {
     private onRaceStart: () => void,
     private onRaceEnd: (winnerCar: ICar) => void,
     private onPaginate: () => void,
-    private carOnUpdate: () => void,
   ) {
     super('div', ['garage']);
     this.animationControls = new AnimationControls(
@@ -43,7 +42,12 @@ export default class Garage extends BaseComponent {
     );
     const pageNumber = new BaseComponent('h3', ['page__number'], `Page #(${page})`);
     const cars = await CarsService.getCars(page ?? 0);
-    this.carTracks = cars.map((car) => new CarTrack(car, this.updateGarage.bind(this)));
+    this.carTracks = cars.map(
+      (car) =>
+        new CarTrack(car, () => {
+          return this.updateGarage(page ?? 0);
+        }),
+    );
     this.prependChildren([...this.carTracks, this.animationControls, pageNumber, header]);
   }
 
@@ -64,8 +68,8 @@ export default class Garage extends BaseComponent {
     });
   }
 
-  updateGarage(): void {
+  updateGarage(page: number): Promise<void> {
     this.destroyChildren();
-    this.carOnUpdate();
+    return this.createGarage(page);
   }
 }

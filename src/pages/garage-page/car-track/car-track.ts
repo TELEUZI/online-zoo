@@ -1,12 +1,11 @@
 import CarsService from '@/services/car-service';
 import { startDrive, startEngine, stopEngine } from '@/api/engine-api';
-import { deleteWinner } from '@/api/winners-api';
 import type { ICar } from '@/interfaces/car-api';
 import BaseComponent from '@/components/base-component';
 import Button from '@/components/button/button';
 import Icon from '@/components/menu/icon/icon';
 import EditButton from '@/pages/garage-page/edit-button/edit-button';
-import AnimationControls from '@/pages/garage-page/animation-controls/animation-controls';
+import AnimationControls from '@/components/controls/animation-controls/animation-controls';
 import Car from '../car/car';
 
 const VELOCITY_MULTIPLIER = 2;
@@ -56,12 +55,10 @@ export default class CarTrack extends BaseComponent {
   }
 
   deleteCar(): void {
-    deleteWinner(this.id)
-      .then(() => CarsService.deleteCar(this.id))
-      .then(() => {
-        this.destroy();
-        this.onUpdate?.();
-      });
+    CarsService.deleteCar(this.id).then(() => {
+      this.destroy();
+      this.onUpdate?.();
+    });
   }
 
   async animateCar(): Promise<ICar> {
@@ -89,9 +86,5 @@ export default class CarTrack extends BaseComponent {
 
   private pauseAnimation(): void {
     this.car.pauseAnimation();
-  }
-
-  setOnUpdate(callback: () => void): void {
-    this.onUpdate = callback;
   }
 }

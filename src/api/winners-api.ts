@@ -1,5 +1,5 @@
-import APIConstants from '../enums/api-constants';
-import type { WinnersInfo, WinnerInfo } from '../interfaces/winner-api';
+import APIConstants from '@/enums/api-constants';
+import type { WinnersInfo, WinnerInfo } from '@/interfaces/winner-api';
 
 const WINNERS_URL = `${APIConstants.baseUrl}/winners`;
 
@@ -36,8 +36,13 @@ export async function createWinner(body: WinnerInfo): Promise<WinnerInfo> {
 }
 
 export async function deleteWinner(id: number): Promise<Record<string, never>> {
-  //  if ((await getWinners()).items.find((winners) => winners.id === id))
-  return (await fetch(`${WINNERS_URL}/${id}`, { method: 'DELETE' })).json();
+  try {
+    const response = await fetch(`${WINNERS_URL}/${id}`, { method: 'DELETE' });
+    return await response.json();
+  } catch (error) {
+    console.log(error);
+    return {};
+  }
 }
 
 export async function updateWinner(

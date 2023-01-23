@@ -2,6 +2,7 @@ import { createCar, deleteCar, getCars, updateCar } from '@/api/car-api';
 import type { CarApiResponse, ICar } from '@/interfaces/car-api';
 import APIConstants from '@/enums/api-constants';
 import getRandomName, { getRandomColor } from '@/utils/random-name-generator';
+import { deleteWinner } from '@/api/winners-api';
 
 export const NUMERIC_SYSTEM = 10;
 export default abstract class CarsService {
@@ -27,7 +28,7 @@ export default abstract class CarsService {
   }
 
   static deleteCar(id: number): Promise<CarApiResponse> {
-    return deleteCar(id);
+    return deleteWinner(id).then(() => deleteCar(id));
   }
 
   static updateCar(id: number, name: string, color: string): Promise<CarApiResponse> {
