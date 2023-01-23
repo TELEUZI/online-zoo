@@ -1,19 +1,19 @@
 import BaseComponent from '@/components/base-component';
 import Button from '@/components/button/button';
 
-interface ButtonConfig {
+export interface ButtonConfig {
   textContent: string;
 }
 
-interface ControlsConfig {
+export interface ControlsConfig {
   start: ButtonConfig;
   stop: ButtonConfig;
 }
 
-export default class AnimationControls extends BaseComponent {
-  private readonly startButton: Button;
+export default abstract class Controls extends BaseComponent {
+  protected readonly startButton: Button;
 
-  private readonly stopButton: Button;
+  protected readonly stopButton: Button;
 
   constructor(
     onStart: () => Promise<unknown>,
@@ -24,29 +24,22 @@ export default class AnimationControls extends BaseComponent {
       stop: { textContent: 'Stop' },
     },
   ) {
-    super('div', ['animation-controls', ...(containerClasses ?? [])]);
+    super('div', ['controls', ...(containerClasses ?? [])]);
     this.startButton = new Button(start.textContent, ['start-button'], () => {
-      this.handleEmits('after', onStart, this.setStartState.bind(this));
+      this.handleEmits(onStart, this.setStartState.bind(this), 'after');
     });
     this.stopButton = new Button(stop.textContent, ['stop-button'], () => {
-      this.handleEmits('before', onStop, this.setStopState.bind(this));
+      this.handleEmits(onStop, this.setStopState.bind(this), 'before');
     });
     this.stopButton.setAttribute('disabled', 'disabled');
     this.appendChildren([this.startButton, this.stopButton]);
   }
 
-  private handleEmits(
-    emitMoment: 'before' | 'after',
+  abstract handleEmits(
     callback: () => Promise<unknown>,
-    stateHandler: AnimationControls['setStartState'] | AnimationControls['setStopState'],
-  ): void {
-    if (emitMoment === 'before') {
-      callback().then(() => stateHandler());
-    } else {
-      stateHandler();
-      callback();
-    }
-  }
+    stateHandler: Controls['setStartState'] | Controls['setStopState'],
+    emitMoment?: 'before' | 'after',
+  ): void;
 
   private setStartState(): void {
     this.startButton.setAttribute('disabled', 'disabled');
