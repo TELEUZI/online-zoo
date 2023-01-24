@@ -20,16 +20,6 @@ export default class AnimationControls extends Controls {
     },
   ) {
     super(onStart, onStop, ['animation-controls', ...(containerClasses ?? [])], { start, stop });
-    /*
-    this.startButton = new Button(start.textContent, ['start-button'], () => {
-      this.handleEmits('after', onStart, this.setStartState.bind(this));
-    });
-    this.stopButton = new Button(stop.textContent, ['stop-button'], () => {
-      this.handleEmits('before', onStop, this.setStopState.bind(this));
-    });
-    this.stopButton.setAttribute('disabled', 'disabled');
-    this.appendChildren([this.startButton, this.stopButton]);
-    */
   }
 
   handleEmits(
@@ -44,16 +34,4 @@ export default class AnimationControls extends Controls {
       callback();
     }
   }
-
-  /*
-  protected setStartState(): void {
-    this.startButton.setAttribute('disabled', 'disabled');
-    this.stopButton.removeAttribute('disabled');
-  }
-
-  protected setStopState(): void {
-    this.stopButton.setAttribute('disabled', 'disabled');
-    this.startButton.removeAttribute('disabled');
-  }
-  */
 }

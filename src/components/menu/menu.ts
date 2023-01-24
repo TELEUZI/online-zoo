@@ -3,7 +3,7 @@ import BaseComponent from '../base-component';
 import MenuItem from './menu-item/menu-item';
 
 export default class Menu extends BaseComponent {
-  private items: MenuItem[] = [];
+  private readonly items: MenuItem[] = [];
 
   constructor() {
     super('ul', ['menu'], '');

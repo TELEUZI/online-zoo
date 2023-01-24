@@ -11,8 +11,6 @@ import type { ICar } from '@/interfaces/car-api';
 import Garage from './garage/garage';
 import PageWithPagination from '../pagination-page';
 
-const TIMER_DELAY = 0;
-
 export class GaragePage extends PageWithPagination {
   private readonly garage: Garage;
 
@@ -26,7 +24,7 @@ export class GaragePage extends PageWithPagination {
 
   private readonly randomCarsButton: Button;
 
-  paginationControls: PaginationControls;
+  protected paginationControls: PaginationControls;
 
   constructor() {
     super();
@@ -40,8 +38,7 @@ export class GaragePage extends PageWithPagination {
       this.showPrevious.bind(this),
       ['page__controls_pagination'],
     );
-    this.form = new CarForm(['car-form']);
-    this.form.onSubmit = this.getFormData.bind(this);
+    this.form = new CarForm(['car-form'], this.getFormData.bind(this));
     this.randomCarsButton = new Button(
       'Generate random cars',
       ['page__controls_random-cars'],
@@ -73,7 +70,7 @@ export class GaragePage extends PageWithPagination {
   };
 
   private startTimer(): void {
-    this.timer.start(TIMER_DELAY);
+    this.timer.start();
   }
 
   private async getFormData(car: CarChars): Promise<void> {

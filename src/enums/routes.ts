@@ -1,5 +1,5 @@
 enum NameRoute {
-  Default = 'default',
+  Default = '/default',
   Winners = '/winners',
   Garage = '/garage',
 }

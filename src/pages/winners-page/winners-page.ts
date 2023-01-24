@@ -8,9 +8,8 @@ import WinnerResult from './winners-table/winners-table';
 import CarWinner from './winners-row/winner';
 import PageWithPagination, { PAGINATION_LIMIT_WINNERS } from '../pagination-page';
 
-// eslint-disable-next-line import/prefer-default-export
 export class WinnersPage extends PageWithPagination {
-  paginationLimit = PAGINATION_LIMIT_WINNERS;
+  protected readonly paginationLimit = PAGINATION_LIMIT_WINNERS;
 
   private readonly winnersTable: WinnerResult;
 
@@ -18,11 +17,11 @@ export class WinnersPage extends PageWithPagination {
 
   private lastChosen: [string?, string?] = [];
 
-  protected paginationControls: PaginationControls;
+  protected readonly paginationControls: PaginationControls;
 
-  header!: BaseComponent;
+  private readonly header: BaseComponent;
 
-  pageNumber!: BaseComponent;
+  private readonly pageNumber: BaseComponent;
 
   constructor() {
     super();

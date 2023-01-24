@@ -17,8 +17,4 @@ export default class PopUpWindow extends BaseComponent {
     this.insertChild(this.okButton);
     this.onOkClick?.();
   };
-
-  close(): void {
-    this.toggleClass('hidden');
-  }
 }

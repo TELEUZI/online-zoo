@@ -6,29 +6,34 @@ export interface CarChars {
   color: string;
 }
 export default class CarForm extends BaseComponent {
-  colorInput!: Input;
+  private readonly colorInput: Input;
 
-  submit!: Input;
+  private readonly submit: Input;
 
-  inputs: Input[] = [];
+  private readonly inputs: Input[] = [];
 
-  onSubmit?: (carChars: CarChars) => void;
+  private readonly reset: Input;
 
-  reset!: Input;
+  private readonly carNameInput: Input;
 
-  carNameInput!: Input;
-
-  constructor(classlist: string[]) {
-    super('form', ['form', ...classlist], '');
+  constructor(classList: string[], private onSubmit?: (carChars: CarChars) => void) {
+    super('form', ['form', ...classList], '');
     this.setAttribute('action', '');
-    this.createFormComponents();
-
+    this.carNameInput = new Input('text', ['form__car-input_text'], 'Car name');
+    this.colorInput = new Input('color', ['form__car-input_color']);
     this.inputs.push(this.carNameInput, this.colorInput);
-    this.createUI();
-    this.addUserInputListeners();
-  }
 
-  addUserInputListeners(): void {
+    this.reset = new Input('reset', ['form__car-input_control'], '', 'Reset');
+    this.submit = new Input('submit', ['form__car-input_control'], '', 'Create');
+
+    const inputsWrapper = new BaseComponent('div', ['form__inputs-wrapper']);
+    inputsWrapper.appendChildren(this.inputs);
+
+    const formControls = new BaseComponent('div', ['form__controls']);
+    formControls.appendChildren([this.reset, this.submit]);
+
+    this.appendChildren([inputsWrapper, formControls]);
+
     this.reset.addListener('click', (e: Event) => {
       e.preventDefault();
       this.resetForm();
@@ -36,35 +41,13 @@ export default class CarForm extends BaseComponent {
     this.submit.addListener('click', (e: Event) => {
       e.preventDefault();
       const [name, color] = [...this.inputs.map((input) => input.getValue())];
-      this.onSubmit?.({ name, color });
+      this.onSubmit?.({ name: name || 'Default', color });
       this.resetForm();
     });
   }
 
-  onValidate(): void {
-    if (this.inputs.every((el) => el.isValid)) {
-      this.submit.removeAttribute('disabled');
-    }
-  }
-
-  resetForm(): void {
-    this.carNameInput.getNode().value = '';
-    this.colorInput.getNode().value = '#000000';
-  }
-
-  private createFormComponents(): void {
-    this.carNameInput = new Input('text', ['form__car-input_text'], 'Car name');
-    this.colorInput = new Input('color', ['form__car-input_color']);
-
-    this.reset = new Input('reset', ['form__car-input_control'], '', 'Reset');
-    this.submit = new Input('submit', ['form__car-input_control'], '', 'Create');
-  }
-
-  private createUI(): void {
-    const inputsWrapper = new BaseComponent('div', ['form__inputs-wrapper']);
-    const formControls = new BaseComponent('div', ['form__controls']);
-    inputsWrapper.appendChildren(this.inputs);
-    formControls.appendChildren([this.reset, this.submit]);
-    this.appendChildren([inputsWrapper, formControls]);
+  private resetForm(): void {
+    this.carNameInput.setValue('');
+    this.colorInput.setValue('#000000');
   }
 }

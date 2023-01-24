@@ -10,9 +10,9 @@ export default abstract class PageWithPagination extends BaseComponent {
 
   protected paginationLimit: number = PAGINATION_LIMIT_GARAGE;
 
-  abstract getCount(): Promise<number>;
+  protected abstract getCount(): Promise<number>;
 
-  async updatePaginationButtons(): Promise<void> {
+  protected async updatePaginationButtons(): Promise<void> {
     const count = await this.getCount();
     const pagesCount = Math.ceil(count / this.paginationLimit);
     const isPreviousPageDisabled = this.currentPage === 1;

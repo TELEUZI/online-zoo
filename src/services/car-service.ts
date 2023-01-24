@@ -1,8 +1,8 @@
 import { createCar, deleteCar, getCars, updateCar } from '@/api/car-api';
 import type { CarApiResponse, ICar } from '@/interfaces/car-api';
 import getRandomName, { getRandomColor } from '@/utils/random-name-generator';
-import { deleteWinner } from '@/api/winners-api';
-import Observable from '@/utils/Observable';
+import Observable from '@/utils/observable';
+import WinnersService from '@/services/winners-service';
 
 export const NUMERIC_SYSTEM = 10;
 export default abstract class CarsService {
@@ -18,23 +18,27 @@ export default abstract class CarsService {
     return CarsService.carsCount.getValue();
   }
 
-  static async createCars(): Promise<void> {
-    await Promise.all(
-      Array.from({ length: 100 }, () =>
+  static createCars(): Promise<void> {
+    const size = 100;
+    return Promise.all(
+      Array.from({ length: size }, () =>
         createCar({ name: getRandomName(), color: getRandomColor() }),
       ),
-    );
-    this.carsCount.notify((val) => val + 100);
+    ).then(() => {
+      this.carsCount.notify((val) => val + size);
+    });
   }
 
-  static async createCar(name: string, color: string): Promise<void> {
-    await createCar({ name, color });
-    this.carsCount.notify((val) => val + 1);
+  static createCar(name: string, color: string): Promise<void> {
+    return createCar({ name, color }).then(() => {
+      this.carsCount.notify((val) => val + 1);
+    });
   }
 
-  static deleteCar(id: number): Promise<CarApiResponse> {
-    this.carsCount.notify((val) => val - 1);
-    return deleteWinner(id).then(() => deleteCar(id));
+  static deleteCar(id: number): Promise<void> {
+    return Promise.all([WinnersService.deleteWinner(id), deleteCar(id)]).then(() => {
+      this.carsCount.notify((val) => val - 1);
+    });
   }
 
   static updateCar(id: number, name: string, color: string): Promise<CarApiResponse> {

@@ -1,7 +1,7 @@
-import APIConstants from '@/enums/api-constants';
 import type { CarChars, DriveStatus } from '@/interfaces/engine-api';
+import { baseUrl } from './constants';
 
-const ENGINE_URL = `${APIConstants.baseUrl}/engine`;
+const ENGINE_URL = `${baseUrl}/engine`;
 
 export enum DriveStatusName {
   started = 'started',

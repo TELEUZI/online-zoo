@@ -41,26 +41,6 @@ export default class CarTrack extends BaseComponent {
     ]);
   }
 
-  private editCar(): void {
-    this.car.toggleUpdateMode();
-    this.updateButton.moveToSubmitState(this.submit.bind(this));
-  }
-
-  private submit(): void {
-    CarsService.updateCar(this.id, this.car.getName(), this.car.getColor()).then(() => {
-      this.car.toggleUpdateMode();
-      this.car.updateValuesFromForm();
-      this.updateButton.moveToEditState(this.editCar.bind(this));
-    });
-  }
-
-  private deleteCar(): void {
-    CarsService.deleteCar(this.id).then(() => {
-      this.destroy();
-      this.onUpdate?.();
-    });
-  }
-
   async animateCar(): Promise<ICar> {
     const chars = await startEngine(this.id);
     this.car.startAnimation(`${(chars.distance / chars.velocity) * VELOCITY_MULTIPLIER}ms`);
@@ -82,6 +62,26 @@ export default class CarTrack extends BaseComponent {
   async stopCarAnimation(): Promise<void> {
     await stopEngine(this.id);
     this.car.stopAnimation();
+  }
+
+  private editCar(): void {
+    this.car.toggleUpdateMode();
+    this.updateButton.moveToSubmitState(this.submit.bind(this));
+  }
+
+  private submit(): void {
+    CarsService.updateCar(this.id, this.car.getName(), this.car.getColor()).then(() => {
+      this.car.toggleUpdateMode();
+      this.car.updateValuesFromForm();
+      this.updateButton.moveToEditState(this.editCar.bind(this));
+    });
+  }
+
+  private deleteCar(): void {
+    CarsService.deleteCar(this.id).then(() => {
+      this.destroy();
+      this.onUpdate?.();
+    });
   }
 
   private pauseAnimation(): void {

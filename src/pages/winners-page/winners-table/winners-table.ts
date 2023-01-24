@@ -7,7 +7,7 @@ import type CarWinner from '../winners-row/winner';
 export default class WinnerResult extends BaseComponent {
   private readonly body: BaseComponent;
 
-  private rows: CarWinner[] = [];
+  private readonly rows: CarWinner[] = [];
 
   constructor(onWinsClick?: () => void, onTimeClick?: () => void) {
     super('table', ['table']);
@@ -42,6 +42,6 @@ export default class WinnerResult extends BaseComponent {
 
   clearBody(): void {
     this.body.destroyChildren();
-    this.rows = [];
+    this.rows.splice(0);
   }
 }

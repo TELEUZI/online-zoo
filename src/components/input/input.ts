@@ -15,10 +15,6 @@ export default class Input extends BaseComponent {
     this.createListeners();
   }
 
-  setHandler(handler: (input: HTMLInputElement) => boolean): void {
-    this.onInput = handler;
-  }
-
   checkValidation(): void {
     if (this.onInput) {
       this.input.reportValidity();

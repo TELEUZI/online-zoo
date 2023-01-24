@@ -25,7 +25,7 @@ export default class TimerModel {
     this.interval = window.setInterval(this.tick, MILLISECONDS_IN_ONE_SECOND);
   };
 
-  stop = (): void => {
+  private stop = (): void => {
     clearInterval(this.interval);
   };
 

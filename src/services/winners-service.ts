@@ -1,9 +1,10 @@
 import { getCar } from '@/api/car-api';
-import { createWinner, getWinner, getWinners, updateWinner } from '@/api/winners-api';
+import { createWinner, deleteWinner, getWinner, getWinners, updateWinner } from '@/api/winners-api';
 import type { ICar } from '@/interfaces/car-api';
 import type { WinnerInfo } from '@/interfaces/winner-api';
-import Observable from '@/utils/Observable';
+import Observable from '@/utils/observable';
 import { PAGINATION_LIMIT_WINNERS } from '@/pages/pagination-page';
+import { NUMERIC_SYSTEM } from '@/services/car-service';
 
 export default class WinnersService {
   static readonly winnersCount = new Observable<number>(0);
@@ -26,7 +27,7 @@ export default class WinnersService {
     order?: string,
   ): Promise<(ICar & WinnerInfo)[]> {
     const winners = await getWinners(page, PAGINATION_LIMIT_WINNERS, sort, order);
-    this.winnersCount.notify(parseInt(winners.count, 10));
+    this.winnersCount.notify(parseInt(winners.count, NUMERIC_SYSTEM));
     return Promise.all(
       winners.items.map(async (winner: WinnerInfo) => {
         const carInfo = await getCar(winner.id);
@@ -39,6 +40,12 @@ export default class WinnersService {
         };
       }),
     );
+  }
+
+  static deleteWinner(id: number): Promise<void> {
+    return deleteWinner(id).then(() => {
+      this.winnersCount.notify((val) => val - 1);
+    });
   }
 
   static async getCount(): Promise<number> {

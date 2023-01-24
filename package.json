@@ -7,8 +7,8 @@
     "url": "git+https://github.com/TELEUZI/race-game.git"
   },
   "scripts": {
-    "build": "cross-env NODE_ENV=production webpack",
-    "dev-server": "cross-env NODE_ENV=development webpack serve",
+    "build": "cross-env NODE_ENV=production BASE_URL=http://localhost:3000 webpack",
+    "dev-server": "cross-env NODE_ENV=development BASE_URL=http://localhost:3000 webpack serve",
     "lint": "npx eslint . --ext .ts",
     "lint-and-fix": "npx eslint . --ext .ts --fix",
     "prepare": "husky install",

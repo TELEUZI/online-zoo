@@ -1,8 +1,8 @@
-import APIConstants from '@/enums/api-constants';
 import type { WinnersInfo, WinnerInfo } from '@/interfaces/winner-api';
 import { PAGINATION_LIMIT_WINNERS } from '@/pages/pagination-page';
+import { baseUrl } from './constants';
 
-const WINNERS_URL = `${APIConstants.baseUrl}/winners`;
+const WINNERS_URL = `${baseUrl}/winners`;
 
 function getSortOrder(sort: string, order: string) {
   return sort && order ? `&_sort=${sort}&_order=${order}` : '';

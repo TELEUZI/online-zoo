@@ -1,8 +1,8 @@
 import type { CarApiResponse, ICar } from '@/interfaces/car-api';
 import { PAGINATION_LIMIT_GARAGE } from '@/pages/pagination-page';
-import APIConstants from '../enums/api-constants';
+import { baseUrl } from './constants';
 
-const GARAGE_URL = `${APIConstants.baseUrl}/garage`;
+const GARAGE_URL = `${baseUrl}/garage`;
 
 export async function getCars(
   page: number,
