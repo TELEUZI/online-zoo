@@ -3,8 +3,8 @@ import type { CarApiResponse, ICar } from '@/interfaces/car-api';
 import getRandomName, { getRandomColor } from '@/utils/random-name-generator';
 import Observable from '@/utils/observable';
 import WinnersService from '@/services/winners-service';
+import { NUMERIC_SYSTEM } from '@/constants';
 
-export const NUMERIC_SYSTEM = 10;
 export default abstract class CarsService {
   static readonly carsCount = new Observable<number>(0);
 

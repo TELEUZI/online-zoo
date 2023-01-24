@@ -1,5 +1,5 @@
 import type { CarChars, DriveStatus } from '@/interfaces/engine-api';
-import { baseUrl } from './constants';
+import { baseUrl } from '../constants';
 
 const ENGINE_URL = `${baseUrl}/engine`;
 

@@ -1,6 +1,6 @@
 import type { CarApiResponse, ICar } from '@/interfaces/car-api';
 import { PAGINATION_LIMIT_GARAGE } from '@/pages/pagination-page';
-import { baseUrl } from './constants';
+import { baseUrl } from '../constants';
 
 const GARAGE_URL = `${baseUrl}/garage`;
 
