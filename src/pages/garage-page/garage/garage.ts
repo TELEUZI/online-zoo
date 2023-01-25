@@ -92,7 +92,7 @@ export default class Garage extends BaseComponent {
     });
   }
 
-  private async stopAllCars(): Promise<Awaited<void>[]> {
+  private stopAllCars(): Promise<Awaited<void>[]> {
     if (!this.raceEnded) {
       this.cancelRace = true;
     }
