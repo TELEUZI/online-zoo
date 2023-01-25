@@ -6,11 +6,11 @@ import type PageWithPagination from './pages/pagination-page';
 export default class Router {
   private static pageContainer: HTMLElement;
 
-  private static currentRoute: Promise<BaseComponent | undefined>;
+  private static currentRoute: Promise<BaseComponent | undefined> | undefined;
 
   private static routes: Route[];
 
-  public static onPathChangeHandler: () => void = () => {
+  public static onPathChangeHandler(): void {
     const path = window.location.pathname;
 
     const route = Router.routes.find((r) => Router.pathToRegex(r.name).test(path));
@@ -24,7 +24,7 @@ export default class Router {
       }
     }
 
-    Router.currentRoute.then((component) => {
+    Router.currentRoute?.then((component) => {
       component?.destroy();
     });
 
@@ -32,23 +32,23 @@ export default class Router {
       route ?? { name: NameRoute.Default, component: this.defaultComponent },
       props,
     );
-  };
+  }
 
   public static init(pageContainer: HTMLElement, routes: Route[]): void {
     this.pageContainer = pageContainer;
     this.routes = routes;
-    window.addEventListener('popstate', this.onPathChangeHandler);
+    window.addEventListener('popstate', this.onPathChangeHandler.bind(this));
     this.onPathChangeHandler();
   }
 
   public static destroy(): void {
-    window.removeEventListener('popstate', this.onPathChangeHandler);
+    window.removeEventListener('popstate', this.onPathChangeHandler.bind(this));
   }
 
-  private static readonly onPathChange: (
+  private static onPathChange(
     route: Route | undefined,
     props: Record<string, string>,
-  ) => Promise<BaseComponent | PageWithPagination> = async (route, props) => {
+  ): Promise<BaseComponent | PageWithPagination> {
     if (route) {
       return route.component(props).then((component) => {
         Router.pageContainer.append(component.getNode());
@@ -57,7 +57,7 @@ export default class Router {
       });
     }
     return Router.defaultComponent();
-  };
+  }
 
   private static readonly pathToRegex = (path: NameRoute) =>
     new RegExp(`^${path.replace(/\//g, '\\/').replace(/:\w+/g, '([^/]+)')}$`);
