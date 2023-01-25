@@ -1,7 +1,7 @@
 import BaseComponent from '../base-component';
 import Input from '../input/input';
 
-export interface CarChars {
+export interface CarCharacteristics {
   name: string;
   color: string;
 }
@@ -16,7 +16,10 @@ export default class CarForm extends BaseComponent {
 
   private readonly carNameInput: Input;
 
-  constructor(classList: string[], private onSubmit?: (carChars: CarChars) => void) {
+  constructor(
+    classList: string[],
+    private readonly onSubmit?: (CarCharacteristics: CarCharacteristics) => void,
+  ) {
     super('form', ['form', ...classList], '');
     this.setAttribute('action', '');
     this.carNameInput = new Input('text', ['form__car-input_text'], 'Car name');
@@ -38,6 +41,7 @@ export default class CarForm extends BaseComponent {
       e.preventDefault();
       this.resetForm();
     });
+
     this.submit.addListener('click', (e: Event) => {
       e.preventDefault();
       const [name, color] = [...this.inputs.map((input) => input.getValue())];

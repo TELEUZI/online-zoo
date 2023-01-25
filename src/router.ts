@@ -4,16 +4,51 @@ import NameRoute from './enums/routes';
 import type PageWithPagination from './pages/pagination-page';
 
 export default class Router {
-  static pageContainer: HTMLElement;
+  private static pageContainer: HTMLElement;
 
-  private static currentRoute: Promise<BaseComponent> | void;
+  private static currentRoute: Promise<BaseComponent | undefined>;
 
   private static routes: Route[];
 
-  private static onPathChange: (
-    route: Route,
+  public static onPathChangeHandler: () => void = () => {
+    const path = window.location.pathname;
+
+    const route = Router.routes.find((r) => Router.pathToRegex(r.name).test(path));
+    const props = Object.fromEntries(new URLSearchParams(window.location.search).entries());
+
+    if (route) {
+      const endIndex = -1;
+      const values = Router.pathToRegex(route.name).exec(window.location.pathname)?.slice(endIndex);
+      if (values) {
+        Object.assign(props, Router.getParams(route.name, values));
+      }
+    }
+
+    Router.currentRoute.then((component) => {
+      component?.destroy();
+    });
+
+    Router.currentRoute = Router.onPathChange(
+      route ?? { name: NameRoute.Default, component: this.defaultComponent },
+      props,
+    );
+  };
+
+  public static init(pageContainer: HTMLElement, routes: Route[]): void {
+    this.pageContainer = pageContainer;
+    this.routes = routes;
+    window.addEventListener('popstate', this.onPathChangeHandler);
+    this.onPathChangeHandler();
+  }
+
+  public static destroy(): void {
+    window.removeEventListener('popstate', this.onPathChangeHandler);
+  }
+
+  private static readonly onPathChange: (
+    route: Route | undefined,
     props: Record<string, string>,
-  ) => Promise<BaseComponent | PageWithPagination> | void = (route, props) => {
+  ) => Promise<BaseComponent | PageWithPagination> = async (route, props) => {
     if (route) {
       return route.component(props).then((component) => {
         Router.pageContainer.append(component.getNode());
@@ -24,52 +59,18 @@ export default class Router {
     return Router.defaultComponent();
   };
 
-  private static pathToRegex = (path: NameRoute) =>
+  private static readonly pathToRegex = (path: NameRoute) =>
     new RegExp(`^${path.replace(/\//g, '\\/').replace(/:\w+/g, '([^/]+)')}$`);
 
-  private static getParams = (path: NameRoute, values: string[]) => {
+  private static readonly getParams = (path: NameRoute, values: string[]) => {
     const keys = Array.from(path.matchAll(/:(\w+)/g)).map((result) => result[1]);
 
     return Object.fromEntries(keys.map((key, i) => [key, values[i]]));
   };
 
-  private static defaultComponent = async () => {
+  private static readonly defaultComponent = async () => {
     const { GaragePage } = await import('./pages/garage-page/garage-page');
 
     return new GaragePage();
   };
-
-  static onPathChangeHandler: () => void = () => {
-    const path = window.location.pathname;
-
-    const route = Router.routes.find((r) => Router.pathToRegex(r.name).test(path));
-    const props = Object.fromEntries(new URLSearchParams(window.location.search).entries());
-
-    if (route) {
-      const values = window.location.pathname.match(Router.pathToRegex(route.name))?.slice(-1);
-      if (values) {
-        Object.assign(props, Router.getParams(route.name, values));
-      }
-    }
-
-    if (Router.currentRoute) {
-      Router.currentRoute.then((component) => component.destroy());
-    }
-
-    Router.currentRoute = Router.onPathChange(
-      route ?? { name: NameRoute.Default, component: this.defaultComponent },
-      props,
-    );
-  };
-
-  static init(pageContainer: HTMLElement, routes: Route[]): void {
-    this.pageContainer = pageContainer;
-    this.routes = routes;
-    window.addEventListener('popstate', this.onPathChangeHandler);
-    this.onPathChangeHandler();
-  }
-
-  static destroy(): void {
-    window.removeEventListener('popstate', this.onPathChangeHandler);
-  }
 }

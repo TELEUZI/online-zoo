@@ -11,6 +11,8 @@ export default class Menu extends BaseComponent {
       new MenuItem('Garage', 'garage', 'garage-icon'),
       new MenuItem('Winners', 'winners', 'trophy-icon'),
     );
-    this.items.map((el) => this.insertChild(el));
+    this.items.forEach((el) => {
+      this.insertChild(el);
+    });
   }
 }

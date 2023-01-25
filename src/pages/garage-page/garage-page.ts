@@ -3,7 +3,8 @@ import BaseComponent from '@/components/base-component';
 import Button from '@/components/button/button';
 import ModalWindow from '@/components/pop-up/modal-window';
 import PopUpWindow from '@/components/pop-up/pop-up';
-import CarForm, { CarChars } from '@/components/reg-form/reg-form';
+import type { CarCharacteristics } from '@/components/reg-form/reg-form';
+import CarForm from '@/components/reg-form/reg-form';
 import Timer from '@/components/timer/timer';
 import WinnerResultModel from '@/services/winners-service';
 import CarsService from '@/services/car-service';
@@ -12,6 +13,8 @@ import Garage from './garage/garage';
 import PageWithPagination from '../pagination-page';
 
 export class GaragePage extends PageWithPagination {
+  protected paginationControls: PaginationControls;
+
   private readonly garage: Garage;
 
   private readonly form: CarForm;
@@ -23,8 +26,6 @@ export class GaragePage extends PageWithPagination {
   private readonly timer: Timer;
 
   private readonly randomCarsButton: Button;
-
-  protected paginationControls: PaginationControls;
 
   constructor() {
     super();
@@ -58,11 +59,11 @@ export class GaragePage extends PageWithPagination {
     });
   }
 
-  async getCount(): Promise<number> {
+  protected async getCount(): Promise<number> {
     return CarsService.getCarsCount();
   }
 
-  private handleRaceEnd = async (winner: ICar): Promise<void> => {
+  private readonly handleRaceEnd = async (winner: ICar): Promise<void> => {
     await WinnerResultModel.createWinner(winner.id, this.timer.getSeconds());
     this.createWinPopup(`Первым пришёл водитель ${winner.name} за ${this.timer.getTime()}`);
     this.toggleModal();
@@ -73,7 +74,7 @@ export class GaragePage extends PageWithPagination {
     this.timer.start();
   }
 
-  private async getFormData(car: CarChars): Promise<void> {
+  private async getFormData(car: CarCharacteristics): Promise<void> {
     await this.updatePaginationButtons();
     await CarsService.createCar(car.name, car.color);
     return this.garage.updateGarageWithPagination(this.currentPage);

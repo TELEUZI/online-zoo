@@ -4,16 +4,20 @@ import type { ICar } from '@/interfaces/car-api';
 import type { WinnerInfo } from '@/interfaces/winner-api';
 import Observable from '@/utils/observable';
 import { PAGINATION_LIMIT_WINNERS } from '@/pages/pagination-page';
-import { NUMERIC_SYSTEM } from '@/services/car-service';
+import { NUMERIC_SYSTEM } from '@/constants';
+
+const WINNERS_INITIAL_COUNT = 0;
 
 export default class WinnersService {
-  static readonly winnersCount = new Observable<number>(0);
+  public static readonly winnersCount = new Observable<number>(WINNERS_INITIAL_COUNT);
 
-  static async createWinner(carId: number, time: number): Promise<void> {
+  public static async createWinner(carId: number, time: number): Promise<void> {
     const winner = await getWinner(carId);
     if (winner.wins == null) {
       await createWinner({ id: carId, wins: 1, time });
-    } else {
+      return;
+    }
+    if (winner.id && winner.wins && winner.time) {
       await updateWinner(carId, {
         wins: (winner.wins += 1),
         time: winner.time > time ? time : winner.time,
@@ -21,7 +25,7 @@ export default class WinnersService {
     }
   }
 
-  static async getWinners(
+  public static async getWinners(
     page: number,
     sort?: string,
     order?: string,
@@ -42,13 +46,14 @@ export default class WinnersService {
     );
   }
 
-  static deleteWinner(id: number): Promise<void> {
+  public static deleteWinner(id: number): Promise<void> {
     return deleteWinner(id).then(() => {
-      this.winnersCount.notify((val) => val - 1);
+      const deletedCount = 1;
+      this.winnersCount.notify((val) => val - deletedCount);
     });
   }
 
-  static async getCount(): Promise<number> {
-    return this.winnersCount.getValue();
+  public static getCount(): Promise<number> {
+    return Promise.resolve(this.winnersCount.getValue());
   }
 }

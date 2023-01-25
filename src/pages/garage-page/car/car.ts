@@ -3,17 +3,17 @@ import BaseComponent from '../../../components/base-component';
 import Input from '../../../components/input/input';
 
 export default class Car extends BaseComponent {
+  public readonly carNameUpdate: Input;
+
+  public readonly carColorUpdate: Input;
+
   private color: string;
 
   private name: string;
 
-  readonly carImage: HTMLElement;
+  private readonly carImage: HTMLElement;
 
   private readonly carName: BaseComponent;
-
-  public readonly carNameUpdate: Input;
-
-  public readonly carColorUpdate: Input;
 
   constructor(name: string, color: string) {
     super('div', ['car-container']);
@@ -34,51 +34,51 @@ export default class Car extends BaseComponent {
     this.node.append(this.carImage);
   }
 
-  setColor(color: string): void {
+  public setColor(color: string): void {
     this.color = color;
     this.carImage.style.fill = color;
   }
 
-  setName(name: string): void {
+  public setName(name: string): void {
     this.name = name;
     this.carName.setContent(name);
   }
 
-  getName(): string {
+  public getName(): string {
     return this.name;
   }
 
-  getColor(): string {
+  public getColor(): string {
     return this.color;
   }
 
-  startAnimation(duration: string): void {
+  public startAnimation(duration: string): void {
     this.carImage.style.animationName = 'slide';
     this.carImage.style.animationDuration = duration;
     this.carImage.style.animationPlayState = 'running';
     this.carImage.style.animationFillMode = 'forwards';
   }
 
-  stopAnimation(): void {
+  public stopAnimation(): void {
     this.carImage.style.animation = '';
   }
 
-  pauseAnimation(): void {
+  public pauseAnimation(): void {
     this.carImage.style.animationPlayState = 'paused';
   }
 
-  toggleUpdateMode(): void {
+  public toggleUpdateMode(): void {
     this.carName.toggleClass('hidden');
     this.carNameUpdate.toggleClass('hidden');
     this.carColorUpdate.toggleClass('hidden');
   }
 
-  updateValuesFromForm(): void {
+  public updateValuesFromForm(): void {
     this.setName(this.carNameUpdate.getValue());
     this.setColor(this.carColorUpdate.getValue());
   }
 
-  getSVGInHTML(): string {
+  public getSVGInHTML(): string {
     return this.carImage.outerHTML;
   }
 }

@@ -5,11 +5,7 @@ import type { ICar } from '@/interfaces/car-api';
 import CarTrack from '../car-track/car-track';
 
 export default class Garage extends BaseComponent {
-  private carTracks: CarTrack[] = [];
-
   private readonly animationControls: AnimationControls;
-
-  private cancelRace = false;
 
   private readonly tracksContainer: BaseComponent;
 
@@ -17,12 +13,16 @@ export default class Garage extends BaseComponent {
 
   private readonly pageNumber: BaseComponent;
 
+  private carTracks: CarTrack[] = [];
+
+  private cancelRace = false;
+
   private raceEnded = false;
 
   constructor(
-    private onRaceStart: () => void,
-    private onRaceEnd: (winnerCar: ICar) => void,
-    private onPaginate: () => void,
+    private readonly onRaceStart: () => void,
+    private readonly onRaceEnd: (winnerCar: ICar) => void,
+    private readonly onPaginate: () => void,
   ) {
     super('div', ['garage']);
     this.animationControls = new AnimationControls(
@@ -53,26 +53,36 @@ export default class Garage extends BaseComponent {
     });
   }
 
-  async createGarage(page: number): Promise<void> {
+  public async createGarage(page: number): Promise<void> {
     this.onPaginate();
     return this.updateTracksNumber(page);
   }
 
+  public async updateTracksNumber(page: number): Promise<void> {
+    this.pageNumber.setContent(`Page #(${page})`);
+    return this.updateTracks(page);
+  }
+
+  public async updateGarageWithPagination(page: number): Promise<void> {
+    this.onPaginate();
+    return this.updateTracks(page);
+  }
+
   private async updateTracks(page: number): Promise<void> {
     this.destroyCarTracks();
-    const cars = await CarsService.getCars(page ?? 0);
+    const cars = await CarsService.getCars(page);
     this.carTracks = cars.map(
       (car) =>
         new CarTrack(car, () => {
-          return this.updateGarageWithPagination(page ?? 0);
+          return this.updateGarageWithPagination(page);
         }),
     );
     this.tracksContainer.appendChildren([...this.carTracks]);
   }
 
-  private async animateAllCars(): Promise<void> {
+  private animateAllCars(): Promise<void> {
     this.onRaceStart();
-    Promise.any(this.carTracks.map((car) => car.animateCar())).then((res) => {
+    return Promise.any(this.carTracks.map((car) => car.animateCar())).then((res) => {
       if (!this.cancelRace) {
         this.onRaceEnd(res);
       } else {
@@ -87,16 +97,6 @@ export default class Garage extends BaseComponent {
       this.cancelRace = true;
     }
     return Promise.all(this.carTracks.map((car) => car.stopCarAnimation()));
-  }
-
-  async updateTracksNumber(page: number): Promise<void> {
-    this.pageNumber.setContent(`Page #(${page})`);
-    return this.updateTracks(page);
-  }
-
-  async updateGarageWithPagination(page: number): Promise<void> {
-    this.onPaginate();
-    return this.updateTracks(page);
   }
 
   private destroyCarTracks(): void {

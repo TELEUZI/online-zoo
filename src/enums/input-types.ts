@@ -1,5 +1,5 @@
 const enum ValidType {
-  valid = 'valid',
-  invalid = 'invalid',
+  Valid = 'valid',
+  Invalid = 'invalid',
 }
 export default ValidType;

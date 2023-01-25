@@ -20,7 +20,7 @@ export async function getWinners(
   return { items: await response.json(), count: response.headers.get('X-Total-Count') ?? '0' };
 }
 
-export async function getWinner(id: number): Promise<WinnerInfo | Record<string, never>> {
+export async function getWinner(id: number): Promise<Record<string, null> | WinnerInfo> {
   return (await fetch(`${WINNERS_URL}/${id}`)).json();
 }
 
@@ -40,7 +40,7 @@ export async function deleteWinner(id: number): Promise<Record<string, never>> {
   try {
     const response = await fetch(`${WINNERS_URL}/${id}`, { method: 'DELETE' });
     return await response.json();
-  } catch (error) {
+  } catch (error: unknown) {
     return {};
   }
 }

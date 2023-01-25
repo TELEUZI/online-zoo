@@ -5,20 +5,22 @@ import Observable from '@/utils/observable';
 import WinnersService from '@/services/winners-service';
 import { NUMERIC_SYSTEM } from '@/constants';
 
-export default abstract class CarsService {
-  static readonly carsCount = new Observable<number>(0);
+const CARS_INITIAL_COUNT = 0;
 
-  static async getCars(page: number, limit?: number): Promise<ICar[]> {
+export default abstract class CarsService {
+  public static readonly carsCount = new Observable<number>(CARS_INITIAL_COUNT);
+
+  public static async getCars(page: number, limit?: number): Promise<ICar[]> {
     const cars = await getCars(page, limit);
     this.carsCount.notify(parseInt(cars.count, NUMERIC_SYSTEM));
     return cars.items;
   }
 
-  static async getCarsCount(): Promise<number> {
-    return CarsService.carsCount.getValue();
+  public static getCarsCount(): Promise<number> {
+    return Promise.resolve(CarsService.carsCount.getValue());
   }
 
-  static createCars(): Promise<void> {
+  public static createCars(): Promise<void> {
     const size = 100;
     return Promise.all(
       Array.from({ length: size }, () =>
@@ -29,19 +31,21 @@ export default abstract class CarsService {
     });
   }
 
-  static createCar(name: string, color: string): Promise<void> {
+  public static createCar(name: string, color: string): Promise<void> {
     return createCar({ name, color }).then(() => {
-      this.carsCount.notify((val) => val + 1);
+      const createdCount = 1;
+      this.carsCount.notify((val) => val + createdCount);
     });
   }
 
-  static deleteCar(id: number): Promise<void> {
+  public static deleteCar(id: number): Promise<void> {
     return Promise.all([WinnersService.deleteWinner(id), deleteCar(id)]).then(() => {
-      this.carsCount.notify((val) => val - 1);
+      const deletedCount = 1;
+      this.carsCount.notify((val) => val - deletedCount);
     });
   }
 
-  static updateCar(id: number, name: string, color: string): Promise<CarApiResponse> {
+  public static updateCar(id: number, name: string, color: string): Promise<CarApiResponse> {
     return updateCar(id, {
       name,
       color,

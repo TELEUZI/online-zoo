@@ -1,4 +1,4 @@
-export interface CarChars {
+export interface EngineCharacteristics {
   velocity: number;
   distance: number;
 }

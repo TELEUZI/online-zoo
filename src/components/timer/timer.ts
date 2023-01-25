@@ -1,12 +1,13 @@
-import { NUMERIC_SYSTEM } from '@/services/car-service';
+import { NUMERIC_SYSTEM } from '@/constants';
 import type Time from '../../interfaces/time';
 import TimerModel from './timer-model';
 import TimerView from './timer-view';
 
+const ZERO_IN_SYSTEM = 0;
 export default class Timer {
-  private model: TimerModel;
+  private readonly model: TimerModel;
 
-  private view: TimerView;
+  private readonly view: TimerView;
 
   private currentTime = '';
 
@@ -16,21 +17,21 @@ export default class Timer {
     this.model.onTick = this.updateView.bind(this);
   }
 
-  getTime(): string {
+  public getTime(): string {
     return this.getCurrentTime(this.model.getTime());
   }
 
-  start(delay = 0): void {
+  public start(delay = ZERO_IN_SYSTEM): void {
     setTimeout(() => {
       this.model.start();
     }, delay);
   }
 
-  reset(): void {
+  public reset(): void {
     this.model.reset();
   }
 
-  getSeconds(): number {
+  public getSeconds(): number {
     return this.model.getSeconds();
   }
 
@@ -39,10 +40,12 @@ export default class Timer {
   }
 
   private getCurrentTime(currentTime: Time): string {
+    const leasValuableNumber = 1;
+    const numberBeforeChange = NUMERIC_SYSTEM - leasValuableNumber;
     this.currentTime = `${
-      currentTime.minutes <= NUMERIC_SYSTEM - 1 ? `0${currentTime.minutes}` : currentTime.minutes
+      currentTime.minutes <= numberBeforeChange ? `0${currentTime.minutes}` : currentTime.minutes
     }:${
-      currentTime.seconds <= NUMERIC_SYSTEM - 1 ? `0${currentTime.seconds}` : currentTime.seconds
+      currentTime.seconds <= numberBeforeChange ? `0${currentTime.seconds}` : currentTime.seconds
     }`;
     return this.currentTime;
   }

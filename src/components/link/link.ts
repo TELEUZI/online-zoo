@@ -9,7 +9,7 @@ export default class Link extends BaseComponent {
     this.node.addEventListener('click', this.changeRoute);
   }
 
-  private changeRoute = (event: Event) => {
+  private readonly changeRoute = (event: Event) => {
     event.preventDefault();
     const { currentTarget } = event;
     if (currentTarget instanceof HTMLAnchorElement) {

@@ -3,6 +3,7 @@ export interface ICar {
   color: string;
   id: number;
 }
+
 export interface CarApiResponse {
   items: ICar[];
   count: string;

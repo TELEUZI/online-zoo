@@ -4,25 +4,25 @@ function isCallable(fn: unknown): fn is CallableFunction {
 class Observable<ListenerType> {
   private value: ListenerType;
 
-  private listeners: Array<(params: ListenerType) => void>;
+  private listeners: ((params: ListenerType) => void)[];
 
   constructor(initialValue: ListenerType) {
     this.value = initialValue;
     this.listeners = [];
   }
 
-  subscribe(listener: (params: ListenerType) => void): void {
+  public subscribe(listener: (params: ListenerType) => void): void {
     this.listeners.push(listener);
   }
 
-  unsubscribe(listener: (params: ListenerType) => void): void {
+  public unsubscribe(listener: (params: ListenerType) => void): void {
     this.listeners = this.listeners.filter((elem) => elem !== listener);
   }
 
-  notify(params: (previousValue: ListenerType) => ListenerType): void;
-  notify(params: ListenerType): void;
-  notify(
-    params: ListenerType | (((previousValue: ListenerType) => ListenerType) & CallableFunction),
+  public notify(params: (previousValue: ListenerType) => ListenerType): void;
+  public notify(params: ListenerType): void;
+  public notify(
+    params: ListenerType | (CallableFunction & ((previousValue: ListenerType) => ListenerType)),
   ): void {
     if (isCallable(params)) {
       this.value = params(this.value);
@@ -30,10 +30,12 @@ class Observable<ListenerType> {
       this.value = params;
     }
 
-    this.listeners.forEach((listener) => listener(this.value));
+    this.listeners.forEach((listener) => {
+      listener(this.value);
+    });
   }
 
-  getValue(): ListenerType {
+  public getValue(): ListenerType {
     return this.value;
   }
 }

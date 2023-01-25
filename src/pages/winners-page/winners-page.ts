@@ -4,29 +4,29 @@ import type { ICar } from '@/interfaces/car-api';
 import type { WinnerInfo } from '@/interfaces/winner-api';
 import CellComponent from '@/components/table/cell';
 import PaginationControls from '@/components/controls/pagination-controls/pagination-controls';
-import WinnerResult from './winners-table/winners-table';
-import CarWinner from './winners-row/winner';
+import WinnersTable from './winners-table/winners-table';
+import WinnerRow from './winners-row/winner-row';
 import PageWithPagination, { PAGINATION_LIMIT_WINNERS } from '../pagination-page';
 
 export class WinnersPage extends PageWithPagination {
+  protected readonly paginationControls: PaginationControls;
+
   protected readonly paginationLimit = PAGINATION_LIMIT_WINNERS;
 
-  private readonly winnersTable: WinnerResult;
-
-  private winSortType = 'ASC';
-
-  private lastChosen: [string?, string?] = [];
-
-  protected readonly paginationControls: PaginationControls;
+  private readonly winnersTable: WinnersTable;
 
   private readonly header: BaseComponent;
 
   private readonly pageNumber: BaseComponent;
 
+  private winSortType = 'ASC';
+
+  private lastChosen: [string?, string?] = [];
+
   constructor() {
     super();
     this.currentPage = 1;
-    this.winnersTable = new WinnerResult(
+    this.winnersTable = new WinnersTable(
       this.sortTable.bind(this, 'wins'),
       this.sortTable.bind(this, 'time'),
     );
@@ -46,53 +46,54 @@ export class WinnersPage extends PageWithPagination {
     this.updateTable();
   }
 
-  async getCount(): Promise<number> {
+  protected async getCount(): Promise<number> {
     return WinnersService.getCount();
   }
 
-  async updateTable(): Promise<void> {
+  private async updateTable(): Promise<void> {
     const winners = await WinnersService.getWinners(this.currentPage, ...this.lastChosen);
     const carWinners = winners.map(
-      ({ name, color, wins, time }) => new CarWinner(name, color, wins, time),
+      ({ name, color, wins, time }) => new WinnerRow(name, color, wins, time),
     );
 
     this.createTableUI(carWinners);
   }
 
-  async sortTable(value = 'id'): Promise<void> {
+  private async sortTable(value = 'id'): Promise<void> {
     const winners = await this.getSortedBy(value);
     this.recreateTableUI(winners);
   }
 
-  createTableUI(winners: CarWinner[]): void {
+  private createTableUI(winners: WinnerRow[]): void {
     this.winnersTable.clearBody();
     this.updatePaginationButtons().then(() => {
       this.pageNumber.setContent(`Page #(${this.currentPage})`);
       winners.forEach((row, index) => {
-        row.prepend(new CellComponent((index + 1).toString()));
+        const incrementIndexBy = 1;
+        row.prepend(new CellComponent((index + incrementIndexBy).toString()));
         this.winnersTable.pushRow(row);
       });
     });
   }
 
-  recreateTableUI(winners: (ICar & WinnerInfo)[]): void {
+  private recreateTableUI(winners: (ICar & WinnerInfo)[]): void {
     winners.forEach((row, index) => {
       this.winnersTable.updateRow(row, index);
     });
   }
 
-  async getSortedBy(value: string): Promise<(ICar & WinnerInfo)[]> {
+  private async getSortedBy(value: string): Promise<(ICar & WinnerInfo)[]> {
     this.winSortType = this.winSortType === 'ASC' ? 'DESC' : 'ASC';
     this.lastChosen = [value, this.winSortType];
     return WinnersService.getWinners(this.currentPage, value, this.winSortType);
   }
 
-  async showNext(): Promise<void> {
+  private async showNext(): Promise<void> {
     this.currentPage += 1;
     return this.updateTable();
   }
 
-  async showPrevious(): Promise<void> {
+  private async showPrevious(): Promise<void> {
     this.currentPage -= 1;
     return this.updateTable();
   }

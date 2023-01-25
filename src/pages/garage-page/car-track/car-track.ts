@@ -20,7 +20,7 @@ export default class CarTrack extends BaseComponent {
 
   private readonly deleteButton: Button;
 
-  constructor({ id, name, color }: ICar, private onUpdate?: () => void) {
+  constructor({ id, name, color }: ICar, private readonly onUpdate?: () => void) {
     super('div', ['car-track']);
     this.id = id;
     this.car = new Car(name, color);
@@ -41,7 +41,7 @@ export default class CarTrack extends BaseComponent {
     ]);
   }
 
-  async animateCar(): Promise<ICar> {
+  public async animateCar(): Promise<ICar> {
     const chars = await startEngine(this.id);
     this.car.startAnimation(`${(chars.distance / chars.velocity) * VELOCITY_MULTIPLIER}ms`);
     return new Promise((resolve) =>
@@ -59,7 +59,7 @@ export default class CarTrack extends BaseComponent {
     );
   }
 
-  async stopCarAnimation(): Promise<void> {
+  public async stopCarAnimation(): Promise<void> {
     await stopEngine(this.id);
     this.car.stopAnimation();
   }

@@ -24,7 +24,7 @@ export default abstract class Controls extends BaseComponent {
       stop: { textContent: 'Stop' },
     },
   ) {
-    super('div', ['controls', ...(containerClasses ?? [])]);
+    super('div', ['controls', ...containerClasses]);
     this.startButton = new Button(start.textContent, ['start-button'], () => {
       this.handleEmits(onStart, this.setStartState.bind(this), 'after');
     });
@@ -35,12 +35,6 @@ export default abstract class Controls extends BaseComponent {
     this.appendChildren([this.startButton, this.stopButton]);
   }
 
-  abstract handleEmits(
-    callback: () => Promise<unknown>,
-    stateHandler: Controls['setStartState'] | Controls['setStopState'],
-    emitMoment?: 'before' | 'after',
-  ): void;
-
   private setStartState(): void {
     this.startButton.setAttribute('disabled', 'disabled');
     this.stopButton.removeAttribute('disabled');
@@ -50,4 +44,10 @@ export default abstract class Controls extends BaseComponent {
     this.stopButton.setAttribute('disabled', 'disabled');
     this.startButton.removeAttribute('disabled');
   }
+
+  protected abstract handleEmits(
+    callback: () => Promise<unknown>,
+    stateHandler: Controls['setStartState'] | Controls['setStopState'],
+    emitMoment?: 'after' | 'before',
+  ): void;
 }

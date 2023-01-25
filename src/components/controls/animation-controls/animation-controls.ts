@@ -19,16 +19,18 @@ export default class AnimationControls extends Controls {
       stop: { textContent: 'Stop' },
     },
   ) {
-    super(onStart, onStop, ['animation-controls', ...(containerClasses ?? [])], { start, stop });
+    super(onStart, onStop, ['animation-controls', ...containerClasses], { start, stop });
   }
 
-  handleEmits(
+  protected handleEmits(
     callback: () => Promise<unknown>,
     stateHandler: AnimationControls['setStartState'] | AnimationControls['setStopState'],
-    emitMoment: 'before' | 'after',
+    emitMoment: 'after' | 'before',
   ): void {
     if (emitMoment === 'before') {
-      callback().then(() => stateHandler());
+      callback().then(() => {
+        stateHandler();
+      });
     } else {
       stateHandler();
       callback();

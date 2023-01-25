@@ -5,7 +5,7 @@ export default class BaseComponent {
 
   constructor(
     tagName: keyof HTMLElementTagNameMap = 'div',
-    classNames: Array<string> = [],
+    classNames: string[] = [],
     textContent = '',
   ) {
     this.node = document.createElement(tagName);
@@ -13,67 +13,67 @@ export default class BaseComponent {
     this.node.innerText = textContent;
   }
 
-  insertChild(child: BaseComponent): void {
+  public insertChild(child: BaseComponent): void {
     this.node.append(child.getNode());
   }
 
-  prepend(child: BaseComponent): void {
+  public prepend(child: BaseComponent): void {
     this.node.prepend(child.getNode());
   }
 
-  prependChildren(child: BaseComponent[]): void {
-    child.forEach((el) => {
-      this.prepend(el);
-    });
-  }
-
-  appendChildren(child: BaseComponent[]): void {
+  public appendChildren(child: BaseComponent[]): void {
     child.forEach((el) => {
       this.insertChild(el);
     });
   }
 
-  getNode(): HTMLElement {
+  public prependChildren(child: BaseComponent[]): void {
+    child.forEach((el) => {
+      this.prepend(el);
+    });
+  }
+
+  public getNode(): HTMLElement {
     return this.node;
   }
 
-  addClass(className: string): void {
+  public addClass(className: string): void {
     this.node.classList.add(className);
   }
 
-  setContent(content: string): void {
-    this.node.innerText = content;
+  public setContent(content: string): void {
+    this.node.textContent = content;
   }
 
-  setHTML(html: string): void {
+  public setHTML(html: string): void {
     this.node.innerHTML = html;
   }
 
-  setAttribute(attribute: string, value: string): void {
+  public setAttribute(attribute: string, value: string): void {
     this.node.setAttribute(attribute, value);
   }
 
-  removeAttribute(attribute: string): void {
+  public removeAttribute(attribute: string): void {
     this.node.removeAttribute(attribute);
   }
 
-  toggleClass(className: string): void {
+  public toggleClass(className: string): void {
     this.node.classList.toggle(className);
   }
 
-  addListener(
+  public addListener(
     event: string,
     listener: (e: Event) => void,
-    options: boolean | AddEventListenerOptions = false,
+    options: AddEventListenerOptions | boolean = false,
   ): void {
     this.node.addEventListener(event, listener, options);
   }
 
-  destroy(): void {
+  public destroy(): void {
     this.node.remove();
   }
 
-  destroyChildren(): void {
+  public destroyChildren(): void {
     [...this.node.children].forEach((el) => {
       el.remove();
     });

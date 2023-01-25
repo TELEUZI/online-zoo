@@ -1,17 +1,16 @@
 import Controller from './controller';
-import './normalize.css';
 
 class App {
-  private root: HTMLElement;
+  private readonly root: HTMLElement;
 
-  private controller: Controller;
+  private readonly controller: Controller;
 
   constructor(root: HTMLElement) {
     this.root = root;
     this.controller = new Controller();
   }
 
-  start(): void {
+  public start(): void {
     this.root.appendChild(this.controller.getNode());
   }
 }

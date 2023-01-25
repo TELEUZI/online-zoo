@@ -5,9 +5,9 @@ const MILLISECONDS_IN_ONE_SECOND = 1000;
 const FIRST_DIGIT_IN_ARABIC_NUMERAL_SYSTEM = 0;
 
 export default class TimerModel {
-  private currentTimeInSeconds: number;
+  public onTick?: (value: Time) => void;
 
-  onTick?: (value: Time) => void;
+  private currentTimeInSeconds: number;
 
   private interval?: number;
 
@@ -21,35 +21,35 @@ export default class TimerModel {
     this.currentTimeInSeconds = FIRST_DIGIT_IN_ARABIC_NUMERAL_SYSTEM;
   }
 
-  start = (): void => {
+  public start = (): void => {
     this.interval = window.setInterval(this.tick, MILLISECONDS_IN_ONE_SECOND);
   };
 
-  private stop = (): void => {
-    clearInterval(this.interval);
-  };
-
-  reset = (): void => {
+  public reset = (): void => {
     this.stop();
     this.minutes = FIRST_DIGIT_IN_ARABIC_NUMERAL_SYSTEM;
     this.seconds = FIRST_DIGIT_IN_ARABIC_NUMERAL_SYSTEM;
     this.currentTimeInSeconds = FIRST_DIGIT_IN_ARABIC_NUMERAL_SYSTEM;
   };
 
-  private tick = (): void => {
-    this.currentTimeInSeconds += MILLISECONDS_IN_ONE_SECOND / MILLISECONDS_IN_ONE_SECOND;
-    if (this.onTick) {
-      this.onTick(this.getTime());
-    }
-  };
-
-  getTime(): Time {
+  public getTime(): Time {
     this.minutes = Math.floor(this.currentTimeInSeconds / SECONDS_PER_MINUTE);
     this.seconds = this.currentTimeInSeconds - this.minutes * SECONDS_PER_MINUTE;
     return { minutes: this.minutes, seconds: this.seconds };
   }
 
-  getSeconds(): number {
+  public getSeconds(): number {
     return this.currentTimeInSeconds;
   }
+
+  private readonly stop = (): void => {
+    clearInterval(this.interval);
+  };
+
+  private readonly tick = (): void => {
+    this.currentTimeInSeconds += MILLISECONDS_IN_ONE_SECOND / MILLISECONDS_IN_ONE_SECOND;
+    if (this.onTick) {
+      this.onTick(this.getTime());
+    }
+  };
 }

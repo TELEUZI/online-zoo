@@ -2,52 +2,43 @@ import ValidType from '../../enums/input-types';
 import BaseComponent from '../base-component';
 
 export default class Input extends BaseComponent {
-  onInput?: (input: HTMLInputElement) => boolean;
+  public onInput?: (input: HTMLInputElement) => boolean;
 
   protected input: HTMLInputElement;
 
-  isValid = true;
+  private isValid = true;
 
-  constructor(type: string, classlist: string[], placeholder?: string, value?: string | number) {
+  constructor(type: string, classlist: string[], placeholder?: string, value?: number | string) {
     super('input', ['input', ...classlist], '');
-    this.input = <HTMLInputElement>this.node;
+    this.input = this.node as HTMLInputElement;
     this.setAttributes(type, placeholder ?? '', value ?? '');
-    this.createListeners();
+    this.input.addEventListener('input', () => {
+      this.checkValidation();
+    });
   }
 
-  checkValidation(): void {
+  public getValue(): string {
+    return this.input.value;
+  }
+
+  public setValue(value: string): void {
+    this.input.value = value;
+  }
+
+  private checkValidation(): void {
     if (this.onInput) {
       this.input.reportValidity();
-      this.isValid = this?.onInput(this.input);
-      this.input.classList.add(this.isValid ? ValidType.valid : ValidType.invalid);
-      this.input.classList.remove(this.isValid ? ValidType.invalid : ValidType.valid);
+      this.isValid = this.onInput(this.input);
+      this.input.classList.add(this.isValid ? ValidType.Valid : ValidType.Invalid);
+      this.input.classList.remove(this.isValid ? ValidType.Invalid : ValidType.Valid);
     }
   }
 
-  setAttributes(type: string, placeholder: string, value: string | number): void {
+  private setAttributes(type: string, placeholder: string, value: number | string): void {
     this.setAttribute('type', type);
     this.setAttribute('placeholder', placeholder);
     if (value) {
       this.setAttribute('value', value.toString());
     }
-  }
-
-  createListeners(): void {
-    this.input.addEventListener('input', () => {
-      this.checkValidation();
-    });
-    this.input.addEventListener('invalid', () => {}, false);
-  }
-
-  getValue(): string {
-    return this.input.value;
-  }
-
-  getNode(): HTMLInputElement {
-    return <HTMLInputElement>this.node;
-  }
-
-  setValue(value: string): void {
-    this.input.value = value;
   }
 }

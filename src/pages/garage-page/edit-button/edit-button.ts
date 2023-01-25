@@ -5,12 +5,12 @@ export default class EditButton extends Button {
     super('Edit', ['task__edit-btn'], onClick);
   }
 
-  moveToEditState(onClick: () => void): void {
+  public moveToEditState(onClick: () => void): void {
     this.setContent('Edit');
     this.updateOnClick(onClick);
   }
 
-  moveToSubmitState(onClick: () => void): void {
+  public moveToSubmitState(onClick: () => void): void {
     this.setContent('Submit');
     this.updateOnClick(onClick);
   }

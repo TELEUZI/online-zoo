@@ -2,12 +2,12 @@ import type { ICar } from '@/interfaces/car-api';
 import type { WinnerInfo } from '@/interfaces/winner-api';
 import BaseComponent from '@/components/base-component';
 import TableHead from '@/components/table/table-head';
-import type CarWinner from '../winners-row/winner';
+import type WinnerRow from '../winners-row/winner-row';
 
-export default class WinnerResult extends BaseComponent {
+export default class WinnersTable extends BaseComponent {
   private readonly body: BaseComponent;
 
-  private readonly rows: CarWinner[] = [];
+  private readonly rows: WinnerRow[] = [];
 
   constructor(onWinsClick?: () => void, onTimeClick?: () => void) {
     super('table', ['table']);
@@ -28,20 +28,25 @@ export default class WinnerResult extends BaseComponent {
     this.insertChild(this.body);
   }
 
-  pushRow(comp: CarWinner): void {
+  public pushRow(comp: WinnerRow): void {
     this.body.insertChild(comp);
     this.rows.push(comp);
   }
 
-  updateRow(data: ICar & WinnerInfo, index: number): void {
-    const row = this.rows[index];
-    if (row) {
+  public updateRow(data: ICar & WinnerInfo, index: number): void {
+    const row = this.getRowByIndex(index);
+    if (row !== undefined) {
       row.update(data.name, data.color, data.wins, data.time);
     }
   }
 
-  clearBody(): void {
+  public clearBody(): void {
+    const startDeleteIndex = 0;
     this.body.destroyChildren();
-    this.rows.splice(0);
+    this.rows.splice(startDeleteIndex);
+  }
+
+  public getRowByIndex(index: number): WinnerRow | undefined {
+    return this.rows[index];
   }
 }

@@ -2,7 +2,7 @@ import CellComponent from '@/components/table/cell';
 import BaseComponent from '@/components/base-component';
 import Car from '@/pages/garage-page/car/car';
 
-export default class CarWinner extends BaseComponent {
+export default class WinnerRow extends BaseComponent {
   private readonly car: Car;
 
   private readonly carImage: CellComponent;
@@ -25,7 +25,7 @@ export default class CarWinner extends BaseComponent {
     this.appendChildren([this.carImage, this.carName, this.winsAmount, this.winnerBestTime]);
   }
 
-  update(name: string, color: string, wins: number, bestTime: number): void {
+  public update(name: string, color: string, wins: number, bestTime: number): void {
     this.car.setColor(color);
     this.car.setName(name);
     this.wins = wins;

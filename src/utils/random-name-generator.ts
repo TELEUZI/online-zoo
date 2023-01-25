@@ -24,7 +24,8 @@ const secondPart = [
   'gonschik',
   'piton',
 ];
-function getRandomInInterval(interval: number): number {
+
+export function getRandomInInterval(interval: number): number {
   return Math.floor(Math.random() * interval);
 }
 

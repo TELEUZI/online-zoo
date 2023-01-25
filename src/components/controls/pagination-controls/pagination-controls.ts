@@ -14,22 +14,15 @@ export default class PaginationControls extends Controls {
     onStart: () => Promise<unknown>,
     onStop: () => Promise<unknown>,
     containerClasses: string[] = [],
-    { start, stop }: ControlsConfig = {
+    config: ControlsConfig = {
       start: { textContent: 'Next page' },
       stop: { textContent: 'Previous page' },
     },
   ) {
-    super(onStart, onStop, ['pagination-controls', ...(containerClasses ?? [])], { start, stop });
+    super(onStart, onStop, ['pagination-controls', ...containerClasses], config);
   }
 
-  handleEmits(
-    callback: () => Promise<unknown>,
-    stateHandler: PaginationControls['setStartState'] | PaginationControls['setStopState'],
-  ): void {
-    callback().then(() => stateHandler());
-  }
-
-  updateControlsState(isStartButtonDisabled: boolean, isStopButtonDisabled: boolean): void {
+  public updateControlsState(isStartButtonDisabled: boolean, isStopButtonDisabled: boolean): void {
     if (isStartButtonDisabled) {
       this.startButton.setAttribute('disabled', 'disabled');
     } else {
@@ -40,5 +33,14 @@ export default class PaginationControls extends Controls {
     } else {
       this.stopButton.removeAttribute('disabled');
     }
+  }
+
+  protected handleEmits(
+    callback: () => Promise<unknown>,
+    stateHandler: PaginationControls['setStartState'] | PaginationControls['setStopState'],
+  ): void {
+    callback().then(() => {
+      stateHandler();
+    });
   }
 }
