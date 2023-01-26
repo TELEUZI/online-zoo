@@ -42,8 +42,8 @@ export default class CarTrack extends BaseComponent {
   }
 
   public async animateCar(): Promise<ICar> {
-    const chars = await startEngine(this.id);
-    this.car.startAnimation(`${(chars.distance / chars.velocity) * VELOCITY_MULTIPLIER}ms`);
+    const { distance, velocity } = await startEngine(this.id);
+    this.car.startAnimation(`${(distance / velocity) * VELOCITY_MULTIPLIER}ms`);
     return new Promise((resolve) =>
       startDrive(this.id).then((res) => {
         if (res.success)

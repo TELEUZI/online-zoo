@@ -23,6 +23,8 @@ export class WinnersPage extends PageWithPagination {
 
   private lastChosen: [string?, string?] = [];
 
+  private readonly onWinnersCountChange: (count: number) => void;
+
   constructor() {
     super();
     this.currentPage = 1;
@@ -39,11 +41,18 @@ export class WinnersPage extends PageWithPagination {
     this.pageNumber = new BaseComponent('h3', ['page__number'], `Page #(${this.currentPage})`);
     this.appendChildren([this.paginationControls, this.header, this.pageNumber, this.winnersTable]);
 
-    WinnersService.winnersCount.subscribe((count) => {
+    this.onWinnersCountChange = (count: number) => {
       this.header.setContent(`Winners (${count})`);
-    });
+    };
+
+    WinnersService.winnersCount.subscribe(this.onWinnersCountChange);
 
     this.updateTable();
+  }
+
+  public destroy(): void {
+    WinnersService.winnersCount.unsubscribe(this.onWinnersCountChange);
+    super.destroy();
   }
 
   protected async getCount(): Promise<number> {

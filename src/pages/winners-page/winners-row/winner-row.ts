@@ -18,7 +18,7 @@ export default class WinnerRow extends BaseComponent {
     this.car = new Car(name, color);
     this.wins = wins;
     this.bestTime = bestTime;
-    this.carImage = new CellComponent('', this.car.getSVGInHTML());
+    this.carImage = new CellComponent('', this.car.getSVG());
     this.carName = new CellComponent(this.car.getName());
     this.winsAmount = new CellComponent(this.wins.toString());
     this.winnerBestTime = new CellComponent(this.bestTime.toString());
@@ -34,7 +34,7 @@ export default class WinnerRow extends BaseComponent {
   }
 
   private updateRow(): void {
-    this.carImage.setHTML(this.car.getSVGInHTML());
+    this.carImage.setHTML(this.car.getSVG());
     this.carName.setContent(this.car.getName());
     this.winsAmount.setContent(this.wins.toString());
     this.winnerBestTime.setContent(this.bestTime.toString());

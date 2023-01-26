@@ -46,7 +46,7 @@ export default class WinnersTable extends BaseComponent {
     this.rows.splice(startDeleteIndex);
   }
 
-  public getRowByIndex(index: number): WinnerRow | undefined {
+  private getRowByIndex(index: number): WinnerRow | undefined {
     return this.rows[index];
   }
 }

@@ -35,6 +35,11 @@ export default class Timer {
     return this.model.getSeconds();
   }
 
+  public destroy(): void {
+    this.model.reset();
+    this.view.destroy();
+  }
+
   private updateView(currentTime: Time): void {
     this.view.setTime(this.getCurrentTime(currentTime));
   }

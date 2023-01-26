@@ -1,6 +1,6 @@
-import carTemplate from '../../../assets/car_inline.svg';
 import BaseComponent from '../../../components/base-component';
 import Input from '../../../components/input/input';
+import CarImageComponent from '../car-image/car-image';
 
 export default class Car extends BaseComponent {
   public readonly carNameUpdate: Input;
@@ -11,7 +11,7 @@ export default class Car extends BaseComponent {
 
   private name: string;
 
-  private readonly carImage: HTMLElement;
+  private readonly carImage: CarImageComponent;
 
   private readonly carName: BaseComponent;
 
@@ -21,22 +21,19 @@ export default class Car extends BaseComponent {
     this.color = color;
 
     const carInfoWrapper = new BaseComponent('div', ['car-container__info']);
-    this.carImage = new BaseComponent('div', ['car-container__image']).getNode();
-    this.carImage.innerHTML = carTemplate;
-    this.carImage.style.fill = color;
+    this.carImage = new CarImageComponent();
     this.carName = new BaseComponent('label', ['car-name'], name);
     this.carNameUpdate = new Input('text', ['task__input', 'hidden']);
     this.carColorUpdate = new Input('color', ['task__input', 'hidden']);
     this.carNameUpdate.setValue(name);
     this.carColorUpdate.setValue(color);
     carInfoWrapper.appendChildren([this.carName, this.carNameUpdate, this.carColorUpdate]);
-    this.node.append(carInfoWrapper.getNode());
-    this.node.append(this.carImage);
+    this.appendChildren([carInfoWrapper, this.carImage]);
   }
 
   public setColor(color: string): void {
     this.color = color;
-    this.carImage.style.fill = color;
+    this.carImage.setColor(color);
   }
 
   public setName(name: string): void {
@@ -53,18 +50,20 @@ export default class Car extends BaseComponent {
   }
 
   public startAnimation(duration: string): void {
-    this.carImage.style.animationName = 'slide';
-    this.carImage.style.animationDuration = duration;
-    this.carImage.style.animationPlayState = 'running';
-    this.carImage.style.animationFillMode = 'forwards';
+    this.carImage.setAnimationParams({
+      name: 'slide',
+      duration,
+      playState: 'running',
+      fillMode: 'forwards',
+    });
   }
 
   public stopAnimation(): void {
-    this.carImage.style.animation = '';
+    this.carImage.clearAnimation();
   }
 
   public pauseAnimation(): void {
-    this.carImage.style.animationPlayState = 'paused';
+    this.carImage.setPlayState('paused');
   }
 
   public toggleUpdateMode(): void {
@@ -73,12 +72,12 @@ export default class Car extends BaseComponent {
     this.carColorUpdate.toggleClass('hidden');
   }
 
+  public getSVG(): string {
+    return this.carImage.getSVG();
+  }
+
   public updateValuesFromForm(): void {
     this.setName(this.carNameUpdate.getValue());
     this.setColor(this.carColorUpdate.getValue());
-  }
-
-  public getSVGInHTML(): string {
-    return this.carImage.outerHTML;
   }
 }

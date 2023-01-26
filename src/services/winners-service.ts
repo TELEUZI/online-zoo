@@ -33,14 +33,14 @@ export default class WinnersService {
     const winners = await getWinners(page, PAGINATION_LIMIT_WINNERS, sort, order);
     this.winnersCount.notify(parseInt(winners.count, NUMERIC_SYSTEM));
     return Promise.all(
-      winners.items.map(async (winner: WinnerInfo) => {
-        const carInfo = await getCar(winner.id);
+      winners.items.map(async ({ id, wins, time }: WinnerInfo) => {
+        const { name, color } = await getCar(id);
         return {
-          id: winner.id,
-          name: carInfo.name,
-          color: carInfo.color,
-          wins: winner.wins,
-          time: winner.time,
+          id,
+          name,
+          color,
+          wins,
+          time,
         };
       }),
     );

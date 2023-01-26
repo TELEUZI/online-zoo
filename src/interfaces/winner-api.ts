@@ -3,6 +3,7 @@ export interface WinnerInfo {
   wins: number;
   time: number;
 }
+
 export interface WinnersInfo {
   items: WinnerInfo[];
   count: string;

@@ -2,7 +2,7 @@ import PaginationControls from '@/components/controls/pagination-controls/pagina
 import BaseComponent from '@/components/base-component';
 import Button from '@/components/button/button';
 import ModalWindow from '@/components/pop-up/modal-window';
-import PopUpWindow from '@/components/pop-up/pop-up';
+import ModalContent from '@/components/pop-up/pop-up';
 import type { CarCharacteristics } from '@/components/reg-form/reg-form';
 import CarForm from '@/components/reg-form/reg-form';
 import Timer from '@/components/timer/timer';
@@ -19,7 +19,7 @@ export class GaragePage extends PageWithPagination {
 
   private readonly form: CarForm;
 
-  private readonly popUp: PopUpWindow;
+  private readonly popUp: ModalContent;
 
   private readonly modal: ModalWindow;
 
@@ -51,12 +51,17 @@ export class GaragePage extends PageWithPagination {
     garageControls.appendChildren([this.randomCarsButton, this.paginationControls]);
     this.appendChildren([carFormLabel, this.form, garageControls, this.garage]);
 
-    this.popUp = new PopUpWindow('', this.toggleModal.bind(this));
+    this.popUp = new ModalContent('', this.toggleModal.bind(this));
     this.modal = new ModalWindow(this.popUp, this.node);
     this.toggleModal();
     this.garage.createGarage(this.currentPage).then(() => {
       return this.updatePaginationButtons();
     });
+  }
+
+  public destroy(): void {
+    this.garage.destroy();
+    super.destroy();
   }
 
   protected async getCount(): Promise<number> {

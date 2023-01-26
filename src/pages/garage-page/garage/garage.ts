@@ -19,6 +19,8 @@ export default class Garage extends BaseComponent {
 
   private raceEnded = false;
 
+  private readonly onCarsCountChange: (count: number) => void;
+
   constructor(
     private readonly onRaceStart: () => void,
     private readonly onRaceEnd: (winnerCar: ICar) => void,
@@ -38,6 +40,9 @@ export default class Garage extends BaseComponent {
         },
       },
     );
+    this.onCarsCountChange = (count: number) => {
+      this.header.setContent(`Garage (${count})`);
+    };
     this.tracksContainer = new BaseComponent('div', ['garage__tracks']);
     this.header = new BaseComponent('h2', ['page__name'], `Garage (0)`);
     this.pageNumber = new BaseComponent('h3', ['page__number'], `Page #(0)`);
@@ -48,9 +53,7 @@ export default class Garage extends BaseComponent {
       this.header,
     ]);
 
-    CarsService.carsCount.subscribe((count) => {
-      this.header.setContent(`Garage (${count})`);
-    });
+    CarsService.carsCount.subscribe(this.onCarsCountChange);
   }
 
   public async createGarage(page: number): Promise<void> {
@@ -66,6 +69,11 @@ export default class Garage extends BaseComponent {
   public async updateGarageWithPagination(page: number): Promise<void> {
     this.onPaginate();
     return this.updateTracks(page);
+  }
+
+  public destroy(): void {
+    CarsService.carsCount.unsubscribe(this.onCarsCountChange);
+    super.destroy();
   }
 
   private async updateTracks(page: number): Promise<void> {

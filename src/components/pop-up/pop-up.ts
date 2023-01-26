@@ -1,8 +1,8 @@
 import BaseComponent from '../base-component';
 import Button from '../button/button';
 
-export default class PopUpWindow extends BaseComponent {
-  private okButton: Button;
+export default class ModalContent extends BaseComponent {
+  protected okButton: Button;
 
   constructor(popUpText: string, private readonly onOkClick?: () => void) {
     super('div', [], popUpText);

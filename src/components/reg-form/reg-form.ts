@@ -17,7 +17,7 @@ export default class CarForm extends BaseComponent {
   private readonly carNameInput: Input;
 
   constructor(
-    classList: string[],
+    classList: string[] = [],
     private readonly onSubmit?: (CarCharacteristics: CarCharacteristics) => void,
   ) {
     super('form', ['form', ...classList], '');
