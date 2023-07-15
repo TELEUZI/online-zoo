@@ -21,7 +21,7 @@ export default class Car extends BaseComponent {
     this.color = color;
 
     const carInfoWrapper = new BaseComponent('div', ['car-container__info']);
-    this.carImage = new CarImageComponent();
+    this.carImage = new CarImageComponent(this.color);
     this.carName = new BaseComponent('label', ['car-name'], name);
     this.carNameUpdate = new Input('text', ['task__input', 'hidden']);
     this.carColorUpdate = new Input('color', ['task__input', 'hidden']);
