@@ -28,7 +28,7 @@ export class GaragePage extends PageWithPagination {
   private readonly randomCarsButton: Button;
 
   constructor() {
-    super();
+    super('garage');
     this.garage = new Garage(
       this.startTimer.bind(this),
       this.handleRaceEnd.bind(this),

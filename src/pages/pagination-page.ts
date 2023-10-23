@@ -12,6 +12,10 @@ export default abstract class PageWithPagination extends BaseComponent {
 
   protected abstract paginationControls: PaginationControls;
 
+  constructor(key: string) {
+    super('div', ['page_inner'], '', key);
+  }
+
   protected async updatePaginationButtons(): Promise<void> {
     const count = await this.getCount();
     const pagesCount = Math.ceil(count / this.paginationLimit);

@@ -1,5 +1,7 @@
 import './style.scss';
 
+const cacheStorage = new Map<string, HTMLElement[]>();
+
 export default class BaseComponent {
   protected node: HTMLElement;
 
@@ -7,7 +9,19 @@ export default class BaseComponent {
     tagName: keyof HTMLElementTagNameMap = 'div',
     classNames: string[] = [],
     textContent = '',
+    private readonly key = tagName + classNames.join('-') + textContent,
   ) {
+    if (key && cacheStorage.has(key)) {
+      const elements = cacheStorage.get(key);
+      if (Array.isArray(elements) && elements.length) {
+        const actualElement = elements.pop();
+        if (actualElement) {
+          console.log('got from cache!', key);
+          this.node = actualElement;
+          return;
+        }
+      }
+    }
     this.node = document.createElement(tagName);
     this.node.classList.add(...classNames);
     this.node.innerText = textContent;
@@ -70,6 +84,13 @@ export default class BaseComponent {
   }
 
   public destroy(): void {
+    const cachedElements = cacheStorage.get(this.key);
+    this.node.replaceChildren();
+    if (Array.isArray(cachedElements)) {
+      cachedElements.push(this.node);
+    } else {
+      cacheStorage.set(this.key, [this.node]);
+    }
     this.node.remove();
   }
 

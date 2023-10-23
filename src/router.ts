@@ -1,4 +1,3 @@
-import type BaseComponent from './components/base-component';
 import type { Route } from './interfaces/route-names';
 import NameRoute from './enums/routes';
 import type PageWithPagination from './pages/pagination-page';
@@ -6,7 +5,7 @@ import type PageWithPagination from './pages/pagination-page';
 export default class Router {
   private static pageContainer: HTMLElement;
 
-  private static currentRoute: Promise<BaseComponent | undefined> | undefined;
+  private static currentRoute: Promise<PageWithPagination | undefined> | undefined;
 
   private static routes: Route[];
 
@@ -48,7 +47,7 @@ export default class Router {
   private static onPathChange(
     route: Route | undefined,
     props: Record<string, string>,
-  ): Promise<BaseComponent | PageWithPagination> {
+  ): Promise<PageWithPagination> {
     if (route) {
       return route.component(props).then((component) => {
         Router.pageContainer.append(component.getNode());

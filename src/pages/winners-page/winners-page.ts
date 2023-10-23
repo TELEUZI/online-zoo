@@ -26,7 +26,7 @@ export class WinnersPage extends PageWithPagination {
   private readonly onWinnersCountChange: (count: number) => void;
 
   constructor() {
-    super();
+    super('winners');
     this.currentPage = 1;
     this.winnersTable = new WinnersTable(
       this.sortTable.bind(this, 'wins'),

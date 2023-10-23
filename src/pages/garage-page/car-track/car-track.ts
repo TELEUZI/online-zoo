@@ -21,7 +21,7 @@ export default class CarTrack extends BaseComponent {
   private readonly deleteButton: Button;
 
   constructor({ id, name, color }: ICar, private readonly onUpdate?: () => void) {
-    super('div', ['car-track']);
+    super('div', ['car-track'], '', 'car-track__id');
     this.id = id;
     this.car = new Car(name, color);
     this.animationControls = new AnimationControls(
